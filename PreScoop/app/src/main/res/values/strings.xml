@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">PreScoop</string>
+    <string name="string_range_main">Range</string>
+    <string name="string_address_main">Address / Crossroads</string>
+    <string name="string_rating_main">Rating</string>
+
+    <string-array name="range_array">
+        <item>1 Mile</item>
+        <item>5 Miles</item>
+        <item>10 Miles</item>
+        <item>15 Miles</item>
+        <item>20 Miles</item>
+    </string-array>
+
+</resources>
