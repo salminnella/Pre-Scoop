@@ -1,4 +1,4 @@
-package com.example.anthony.prescoop;
+package com.example.anthony.prescoop.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.example.anthony.prescoop.R;
+import com.example.anthony.prescoop.SpinAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
