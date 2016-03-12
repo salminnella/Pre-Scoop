@@ -3,6 +3,8 @@
     <string name="string_range_main">Range</string>
     <string name="string_address_main">Address / Crossroads</string>
     <string name="string_rating_main">Rating</string>
+    <string name="budget_string">Monthly Budget</string>
+    <string name="preshool_search">Search for PreSchools</string>
 
     <string-array name="range_array">
         <item>1 Mile</item>

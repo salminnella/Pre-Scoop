@@ -1,4 +1,4 @@
-package com.example.anthony.prescoop;
+package com.example.anthony.prescoop.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
+import com.example.anthony.prescoop.R;
 
 /**
  * Created by anthony on 3/10/16.

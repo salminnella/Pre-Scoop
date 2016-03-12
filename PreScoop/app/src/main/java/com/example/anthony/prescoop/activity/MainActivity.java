@@ -3,23 +3,34 @@ package com.example.anthony.prescoop.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.anthony.prescoop.R;
-import com.example.anthony.prescoop.SpinAdapter;
+import com.example.anthony.prescoop.adapters.SpinAdapter;
+import com.example.anthony.prescoop.models.RatingSpinner;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView ratingText;
     TextView rangeText;
     TextView addressText;
+    TextView budgetText;
 
     EditText addressEdit;
+    EditText budgetEdit;
 
     Spinner rangeSpinner;
     Spinner ratingSpinner;
+
+    Button search;
+    ArrayList<RatingSpinner> ratingSpinnerArray;
+    SpinAdapter spinAdapter;
+
 
     int arr_images[] = { R.drawable.one_star,
             R.drawable.two_stars, R.drawable.three_stars,
@@ -37,9 +48,12 @@ public class MainActivity extends AppCompatActivity {
         ratingText = (TextView) findViewById(R.id.rating_text_main);
         rangeText = (TextView) findViewById(R.id.range_text_main);
         addressText = (TextView) findViewById(R.id.address_text_main);
+        budgetText = (TextView) findViewById(R.id.budget_text);
         addressEdit = (EditText) findViewById(R.id.address_edit_main);
+        budgetEdit = (EditText) findViewById(R.id.budget_edit);
         rangeSpinner = (Spinner) findViewById(R.id.range_spinner_main);
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
+        search = (Button) findViewById(R.id.search_button);
 
         // Create an ArrayAdapter using the string-array in strings.xml
         ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter.createFromResource(this, R.array.range_array, android.R.layout.simple_spinner_item);
