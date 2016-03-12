@@ -1,7 +1,9 @@
 package com.example.anthony.prescoop.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
-import com.example.anthony.prescoop.models.RatingSpinner;
+import com.example.anthony.prescoop.models.Rating;
 
 import java.util.ArrayList;
 
@@ -28,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
     Spinner ratingSpinner;
 
     Button search;
-    ArrayList<RatingSpinner> ratingSpinnerArray;
+    ArrayList<Rating> ratingSpinnerArray;
     SpinAdapter spinAdapter;
+
 
 
     int arr_images[] = { R.drawable.one_star,
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
+        setOnClickListeners();
+
     }
 
     private void initViews() {
@@ -64,5 +69,17 @@ public class MainActivity extends AppCompatActivity {
 
         ratingSpinner.setAdapter(new SpinAdapter(MainActivity.this, R.layout.spinner_row));
     }
+
+    private void setOnClickListeners() {
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
 
 }
