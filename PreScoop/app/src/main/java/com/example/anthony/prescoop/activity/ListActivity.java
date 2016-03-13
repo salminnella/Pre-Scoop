@@ -2,8 +2,10 @@ package com.example.anthony.prescoop.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +37,7 @@ public class ListActivity extends AppCompatActivity {
         // enabling the up/back button the toolbar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
 
 
         fillListOfPreschools();
@@ -82,28 +85,50 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
-
-
-    // filling toolbar with menu options, and setting the actions for them
+    /**
+     * filling toolbar with menu options, and setting the actions for them
+     * http://developer.android.com/training/appbar/action-views.html
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_list_activity, menu);
+
+        // action view when user clicks on filter icon
+        MenuItem searchItem = menu.findItem(R.id.action_filter);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        // Define the listener
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when action item collapses
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true;  // Return true to expand action view
+            }
+        };
+
+        // Get the MenuItem for the action item
+        MenuItem actionMenuItem = menu.findItem(R.id.action_filter);
+
+        // Assign the listener to that action item
+        MenuItemCompat.setOnActionExpandListener(actionMenuItem, expandListener);
+
+        // Any other things you have to do when creating the options menu…
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                // User chose the filter action,
-                // filter the list somehow
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 }
