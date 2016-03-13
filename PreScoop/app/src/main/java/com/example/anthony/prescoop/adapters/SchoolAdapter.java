@@ -1,6 +1,7 @@
 package com.example.anthony.prescoop.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class SchoolAdapter extends ArrayAdapter<PreSchool> {
 
         View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_schools, parent, false);
 
+        rowItem.setBackgroundColor(Color.WHITE);
         TextView schoolNameTextView = (TextView) rowItem.findViewById(R.id.school_name_list);
         TextView schoolAddressTextView = (TextView) rowItem.findViewById(R.id.school_address_list);
         ImageView schoolRatingImageView = (ImageView) rowItem.findViewById(R.id.school_rating_list);

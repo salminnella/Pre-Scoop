@@ -7,13 +7,17 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activity.ListActivity"
-    android:background="@drawable/playground">
+    tools:context="com.example.anthony.prescoop.activity.DetailActivity">
 
-    <ListView
-        android:id="@+id/school_results_list"
+    <ImageView
+        android:id="@+id/default_school_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerHeight="2.0dp"></ListView>
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/address_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/address_detail"/>
 
 </RelativeLayout>
