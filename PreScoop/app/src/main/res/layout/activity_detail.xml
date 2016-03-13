@@ -12,12 +12,70 @@
     <ImageView
         android:id="@+id/default_school_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="200dp"
+        android:src="@drawable/urbanites2"/>
 
     <TextView
-        android:id="@+id/address_text"
+        android:id="@+id/address_text_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/address_detail"/>
+        android:text="@string/address_label_detail"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/address_info_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="actual address goes here"
+        android:layout_marginLeft="15dp"
+        android:layout_alignTop="@+id/address_text_detail"
+        android:layout_alignRight="@+id/default_school_image"
+        android:layout_alignEnd="@+id/default_school_image"
+        android:layout_toRightOf="@+id/address_text_detail"
+        android:layout_toEndOf="@+id/address_text_detail"
+        android:layout_above="@+id/rating_text_detail" />
+
+    <TextView
+        android:id="@+id/rating_text_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rating_label_detail"
+        android:layout_below="@+id/address_text_detail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="33dp" />
+
+    <ImageView
+        android:id="@+id/rating_image_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/one_star"
+        android:layout_alignBottom="@+id/rating_text_detail"
+        android:layout_alignLeft="@+id/address_info_detail"
+        android:layout_alignStart="@+id/address_info_detail" />
+
+    <TextView
+        android:id="@+id/description_text_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/description_label_detail"
+        android:layout_marginTop="63dp"
+        android:layout_below="@+id/rating_text_detail"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/description_info_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actual description goes here"
+        android:layout_below="@+id/description_text_detail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

@@ -1,18 +1,21 @@
 package com.example.anthony.prescoop.models;
 
+import java.util.ArrayList;
+
 /**
  * Created by anthony on 3/12/16.
  */
 public class PreSchool {
     private String name;
     private String address;
-    private double cost;
-    private int description;
-    private int rating;
     private String region;
-    private int ageGroup;
     private String type;
     private String phoneNumber;
+    private int description;
+    private int rating;
+    private int ageGroup;
+    private ArrayList<Integer> images;
+    private double cost;
 
     public PreSchool() {
 
@@ -102,4 +105,13 @@ public class PreSchool {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public ArrayList<Integer> getImages() {
+        return images;
+    }
+
+    public void setImages(int image) {
+        this.images.add(image);
+    }
+
 }

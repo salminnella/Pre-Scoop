@@ -3,7 +3,9 @@ package com.example.anthony.prescoop.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.anthony.prescoop.R;
@@ -29,6 +31,8 @@ public class ListActivity extends AppCompatActivity {
         initViews();
         setOnClickListener();
 
+        Log.d("ListActivity", "preschools list: " + preSchools.get(0).getImages());
+
     }
 
     private void fillListOfPreschools() {
@@ -40,6 +44,10 @@ public class ListActivity extends AppCompatActivity {
         preSchools.add(new PreSchool("Little Urbanites", "1258 20th Ave San Francisco California 94122", 0.00, R.string.little_urbanites, 4, "San Francisco"));
     }
 
+    private void addImages() {
+        //preSchools.add();
+    }
+
     private void initViews() {
         listView = (ListView) findViewById(R.id.school_results_list);
         schoolAdapter = new SchoolAdapter(ListActivity.this, preSchools);
@@ -47,9 +55,9 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void setOnClickListener() {
-        listView.setOnClickListener(new View.OnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ListActivity.this, DetailActivity.class);
                 startActivity(intent);
             }

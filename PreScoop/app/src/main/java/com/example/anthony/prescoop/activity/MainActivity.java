@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
@@ -34,15 +35,12 @@ public class MainActivity extends AppCompatActivity {
     SpinAdapter spinAdapter;
 
 
-
-    int arr_images[] = { R.drawable.one_star,
-            R.drawable.two_stars, R.drawable.three_stars,
-            R.drawable.four_stars, R.drawable.five_stars};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
+        setSupportActionBar(myToolbar);
 
         initViews();
         setOnClickListeners();

@@ -13,9 +13,7 @@ import com.example.anthony.prescoop.R;
  * Created by anthony on 3/10/16.
  */
 public class SpinAdapter extends ArrayAdapter {
-    int arr_images[] = { R.drawable.one_star,
-            R.drawable.two_stars, R.drawable.three_stars,
-            R.drawable.four_stars, R.drawable.five_stars};
+    int[] array_images;
 
 
     public SpinAdapter(Context context, int resource) {
@@ -40,7 +38,7 @@ public class SpinAdapter extends ArrayAdapter {
 
 
         ImageView stars = (ImageView)rowItem.findViewById(R.id.stars);
-        stars.setImageResource(arr_images[position]);
+        stars.setImageResource(array_images[position]);
 
         return rowItem;
     }

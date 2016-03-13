@@ -14,7 +14,9 @@
     <string name="quarry_description">The Quarry Lane School, a private, secular day school, provides an academically rigorous and supportive educational environment for students entering preschool through high school.  Our ethnically diverse student body consists of 900 students at our three campuses.  Students are guided by a highly qualified, professional and experienced staff of over 135 teachers.  The Quarry Lane School is accredited by WASC, NCPSA and NIPSA.</string>
     ]
     <string name="acorn_description">Offers interactive curriculum to fully engage and challenge children with programs for ages 2&#8211;3, 4/pre-k, accelerated pre&#8211;k, junior&#8211;k/kindergarten and after&#8211;school care. Multiple locations in Danville and San Ramon. 925&#8211;837&#8211;1145.</string>
-    <string name="address_detail">Address</string>
+    <string name="address_label_detail">Address</string>
+    <string name="rating_label_detail">Rating</string>
+    <string name="description_label_detail">Description</string>
     ]
 
     <string-array name="range_array">
