@@ -2,9 +2,12 @@ package com.example.anthony.prescoop.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,15 +29,17 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        // implements custom toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
         setSupportActionBar(toolbar);
+        // enabling the up/back button the toolbar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         fillListOfPreschools();
         initViews();
         setOnClickListener();
-
-        Log.d("ListActivity", "preschools list: " + preSchools.get(0).getImages());
 
     }
 
@@ -50,6 +55,7 @@ public class ListActivity extends AppCompatActivity {
         preSchools.add(new PreSchool("Little Urbanites", "1258 20th Ave San Francisco California 94122", 0.00, R.string.little_urbanites, 4, "San Francisco"));
     }
 
+    // trying to figure out how to add images to the preshool objects int the image array
     private void addImages() {
         //preSchools.add();
     }
@@ -74,5 +80,30 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+
+    // filling toolbar with menu options, and setting the actions for them
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_list_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                // User chose the filter action,
+                // filter the list somehow
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
