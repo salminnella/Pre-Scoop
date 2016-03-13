@@ -15,7 +15,7 @@
         android:id="@+id/preschool_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@drawable/rounded_corners"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
@@ -25,13 +25,15 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:src="@drawable/urbanites2"
-        android:layout_below="@+id/preschool_toolbar"/>
+        android:layout_below="@+id/preschool_toolbar"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/address_text_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/address_label_detail"
+        android:layout_below="@+id/default_school_image"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
