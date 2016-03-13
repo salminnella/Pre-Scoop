@@ -6,19 +6,20 @@
     <string name="budget_string">Monthly Budget</string>
     <string name="preshool_search">Search for PreSchools</string>]
     <string name="little_urbanites">Little Urbanites was founded on the idea that every city kid deserves an oasis of childhood delight and within our doors that is exactly what they’ll find.</string>
-    ]
+
     <string name="sunset_co_op_description">Sunset Cooperative Nursery School is a parent-participation school for 2- to 6-year-old children. Sunset Co-op provides a trusting and caring environment for our children to live, learn and play. Parent participation is the backbone to the co&#8211;op preschool\'s philosophy and strength. Sunset Co-op\'s community consists of 50 to 60 families, and each family commits to a half-day of work per week. The school has a professional education director and at least two other preschool teachers. There are separate morning and afternoon sessions, with typically 9 adults per session to assist classes of up to 30 kids. </string>
-    ]
+
     <string name="sf_montesorri_description">At SFMA our mission is to help parents build a strong foundation for their child\'s lifelong excellence. Because we are the driving force behind your child\'s most formative years, we understand the importance of our role and take it very seriously. We pride ourselves in the success of every student and welcome you to visit our school to see what makes us different.</string>
-    ]
+
     <string name="quarry_description">The Quarry Lane School, a private, secular day school, provides an academically rigorous and supportive educational environment for students entering preschool through high school.  Our ethnically diverse student body consists of 900 students at our three campuses.  Students are guided by a highly qualified, professional and experienced staff of over 135 teachers.  The Quarry Lane School is accredited by WASC, NCPSA and NIPSA.</string>
-    ]
+
     <string name="acorn_description">Offers interactive curriculum to fully engage and challenge children with programs for ages 2&#8211;3, 4/pre-k, accelerated pre&#8211;k, junior&#8211;k/kindergarten and after&#8211;school care. Multiple locations in Danville and San Ramon. 925&#8211;837&#8211;1145.</string>
     <string name="address_label_detail">Address</string>
     <string name="rating_label_detail">Rating</string>
     <string name="description_label_detail">Description</string>
-    ]
 
+
+    <!-- this is the data for the range drop down in MainActivity -->
     <string-array name="range_array">
         <item>1 Mile</item>
         <item>5 Miles</item>

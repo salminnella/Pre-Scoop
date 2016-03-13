@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner ratingSpinner;
 
     Button search;
+    // trying to add images to the spinner drop down instead of just text - for 1 star, 2 star etc.
     ArrayList<Rating> ratingSpinnerArray;
     SpinAdapter spinAdapter;
 
@@ -58,13 +59,14 @@ public class MainActivity extends AppCompatActivity {
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
         search = (Button) findViewById(R.id.search_button);
 
-        // Create an ArrayAdapter using the string-array in strings.xml
+        // Create an ArrayAdapter for Range drop down using the string-array in strings.xml
         ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter.createFromResource(this, R.array.range_array, android.R.layout.simple_spinner_item);
         // layout to use when the list of choices appears
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //connect the two
         rangeSpinner.setAdapter(spinAdapter);
 
+        // for the images on the drop down
         ratingSpinner.setAdapter(new SpinAdapter(MainActivity.this, R.layout.spinner_row));
     }
 

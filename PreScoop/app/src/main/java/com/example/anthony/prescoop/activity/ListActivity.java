@@ -3,6 +3,7 @@ package com.example.anthony.prescoop.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +26,8 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
+        setSupportActionBar(myToolbar);
 
 
         fillListOfPreschools();
@@ -35,6 +38,9 @@ public class ListActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * filling defualt data for list of preschools
+     */
     private void fillListOfPreschools() {
         preSchools = new ArrayList<>();
         preSchools.add(new PreSchool("Acorn Learning Center", "816 Diablo Rd, Danville, CA 94526", 0.00, R.string.acorn_description, 5, "East Bay"));
@@ -48,12 +54,18 @@ public class ListActivity extends AppCompatActivity {
         //preSchools.add();
     }
 
+    /**
+     * initializing all views in activity
+     */
     private void initViews() {
         listView = (ListView) findViewById(R.id.school_results_list);
         schoolAdapter = new SchoolAdapter(ListActivity.this, preSchools);
         listView.setAdapter(schoolAdapter);
     }
 
+    /**
+     * setting onclick listener for item click in activity
+     */
     private void setOnClickListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
