@@ -16,6 +16,7 @@ public class PreSchool {
     private int ageGroup;
     private ArrayList<Integer> images;
     private double cost;
+    private boolean favorite;
 
     public PreSchool() {
 
@@ -110,7 +111,19 @@ public class PreSchool {
         return images;
     }
 
-    public void setImages(int image) {
+    public void setImages(ArrayList<Integer> images) {
+        this.images = images;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public void addImage(int image) {
         this.images.add(image);
     }
 

@@ -26,8 +26,8 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
-        setSupportActionBar(myToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
+        setSupportActionBar(toolbar);
 
 
         fillListOfPreschools();

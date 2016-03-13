@@ -24,6 +24,7 @@
         android:id="@+id/school_results_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="2.0dp"></ListView>
+        android:dividerHeight="2.0dp"
+        android:layout_below="@+id/preschool_toolbar"></ListView>
 
 </RelativeLayout>
