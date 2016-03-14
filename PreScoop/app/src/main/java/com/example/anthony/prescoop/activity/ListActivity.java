@@ -6,7 +6,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,9 +30,9 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        // implements custom toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
-        setSupportActionBar(toolbar);
+//        // implements custom toolbar
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
+//        setSupportActionBar(toolbar);
         // enabling the up/back button the toolbar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
