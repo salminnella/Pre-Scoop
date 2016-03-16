@@ -30,23 +30,17 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-//        // implements custom toolbar
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.preschool_toolbar);
-//        setSupportActionBar(toolbar);
-        // enabling the up/back button the toolbar
+        //enables the up/back button in the action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-
 
         fillListOfPreschools();
         initViews();
         setOnClickListener();
-
     }
 
     /**
-     * filling defualt data for list of preschools
+     * filling default data for list of preschools
      */
     private void fillListOfPreschools() {
         preSchools = new ArrayList<>();
@@ -57,7 +51,7 @@ public class ListActivity extends AppCompatActivity {
         preSchools.add(new PreSchool("Little Urbanites", "1258 20th Ave San Francisco California 94122", 0.00, R.string.little_urbanites, 4, "San Francisco"));
     }
 
-    // trying to figure out how to add images to the preshool objects int the image array
+    // trying to figure out how to add images to the preshool objects in the image array
     private void addImages() {
         //preSchools.add();
     }

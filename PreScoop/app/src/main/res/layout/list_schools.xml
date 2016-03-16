@@ -15,7 +15,7 @@
 
     <ImageView
         android:id="@+id/school_rating_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="150dp"
+        android:layout_height="30dp"/>
 
 </LinearLayout>
