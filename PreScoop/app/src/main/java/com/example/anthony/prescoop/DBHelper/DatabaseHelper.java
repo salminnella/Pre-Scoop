@@ -1,6 +1,8 @@
 package com.example.anthony.prescoop.DBHelper;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -39,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_PHOTO_1_DESCRIPTION, COL_PHOTO_2, COL_PHOTO_2_DESCRIPTION, COL_PHOTO_3, COL_PHOTO_3_DESCRIPTION,
             COL_PHOTO_4, COL_PHOTO_4_DESCRIPTION, COL_PHOTO_5, COL_PHOTO_5_DESCRIPTION};
 
-    // constructor TODO: may not use this one when implementing getInstance
+    // database constructor
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -68,15 +70,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_PHOTO_5 + " INT " +
             COL_PHOTO_5_DESCRIPTION + " TEXT );";
 
+    private static DatabaseHelper instance;
+
+    public static DatabaseHelper getInstance(Context context) {
+        // makes sure there is only one instance of the database
+        // if there isn't one, make it, otherwise return the one instance
+        if (instance == null) {
+            instance = new DatabaseHelper(context);
+        }
+
+        return instance;
+    }
+
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(CREATE_PRESCHOOLS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void insertIntoPreschools(String name, String address, int rating) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_NAME, name);
+        values.put(COL_STREET_ADDRESS, address);
+        values.put(COL_RATING, rating);
+    }
+
+    public void deleteFromPreschools() {
+
+    }
+
+    /**
+     * Retrieves preschools from the database in a cursor
+     * @return
+     */
+    public Cursor getPreschools() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(DATABASE_NAME, COLUMNS, null, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        return cursor;
     }
 }

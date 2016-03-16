@@ -34,7 +34,7 @@ public class ListActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        fillListOfPreschools();
+        //fillListOfPreschools();
         initViews();
         setOnClickListener();
     }
