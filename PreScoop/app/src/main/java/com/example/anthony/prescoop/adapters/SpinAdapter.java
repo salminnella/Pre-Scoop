@@ -12,12 +12,12 @@ import com.example.anthony.prescoop.R;
 /**
  * Created by anthony on 3/10/16.
  */
-public class SpinAdapter extends ArrayAdapter {
-    int[] array_images;
+public class SpinAdapter extends ArrayAdapter<Integer> {
+    private Integer[] images;
 
-
-    public SpinAdapter(Context context, int resource) {
-        super(context, resource);
+    public SpinAdapter(Context context, Integer[] images) {
+        super(context, R.layout.spinner_row, images);
+        this.images = images;
     }
 
     @Override
@@ -30,20 +30,13 @@ public class SpinAdapter extends ArrayAdapter {
         return getCustomView(position, convertView, parent);
     }
 
-
-
     public View getCustomView(int position, View convertView, ViewGroup parent) {
 
         View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_row, parent, false);
 
-
         ImageView stars = (ImageView)rowItem.findViewById(R.id.stars);
-        stars.setImageResource(array_images[position]);
+        stars.setImageResource(images[position]);
 
         return rowItem;
     }
-
-
-
-
 }

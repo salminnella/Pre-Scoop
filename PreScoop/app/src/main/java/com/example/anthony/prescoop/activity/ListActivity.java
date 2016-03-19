@@ -1,54 +1,100 @@
 package com.example.anthony.prescoop.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
-import com.example.anthony.prescoop.adapters.SchoolAdapter;
+import com.example.anthony.prescoop.adapters.DBCursorAdapter;
+import com.example.anthony.prescoop.adapters.SchoolListAdapter;
 import com.example.anthony.prescoop.models.PreSchool;
 
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
-
+    public static final String RECORD_ID = "id";
 
     ArrayList<PreSchool> preSchools;
     ListView listView;
-    SchoolAdapter schoolAdapter;
+    SchoolListAdapter schoolListAdapter;
+
+    DBCursorAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        //enables the up/back button in the action bar
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true); //enables the up/back button in the action bar
 
-        //fillListOfPreschools();
         initViews();
-        setOnClickListener();
+
+        //receive the search criteria from main, and performs the search
+        String query = receiveIntent();
+        Cursor cursor = searchForSchools(query);
+
+        //listview connects to the adapter
+        cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+        listView.setAdapter(cursorAdapter);
+
+        handleIntent(getIntent());
+
+
+        setOnClickListener(cursor);
     }
 
-    /**
-     * filling default data for list of preschools
-     */
-    private void fillListOfPreschools() {
-        preSchools = new ArrayList<>();
-        preSchools.add(new PreSchool("Acorn Learning Center", "816 Diablo Rd, Danville, CA 94526", 0.00, R.string.acorn_description, 5, "East Bay"));
-        preSchools.add(new PreSchool("The Quarry Lane School", "3750 Boulder St., Pleasanton", 1400.00, R.string.quarry_description, 3, "East Bay"));
-        preSchools.add(new PreSchool("San Francisco Montessori Academy", "1566 32nd Ave., San Francisco", 0.00, R.string.sf_montesorri_description, 5, "San Francisco"));
-        preSchools.add(new PreSchool("Sunset Co-Op Nursery School", "4245 Lawton St, San Francisco, CA", 305.00, R.string.sunset_co_op_description, 4, "San Francisco"));
-        preSchools.add(new PreSchool("Little Urbanites", "1258 20th Ave San Francisco California 94122", 0.00, R.string.little_urbanites, 4, "San Francisco"));
+    private Cursor searchForSchools(String query) {
+
+        DatabaseHelper searchHelper = DatabaseHelper.getInstance(ListActivity.this);
+        Cursor cursor = null;
+
+        if (!query.isEmpty()) {
+            cursor = searchHelper.searchPreschools(query);
+        } else {
+            cursor = searchHelper.getPreschools();
+        }
+
+        return cursor;
+    }
+
+    private String receiveIntent() {
+        Intent intentFromMain = getIntent();
+        String schoolName = intentFromMain.getStringExtra(MainActivity.SCHOOL_NAME);
+        String query = schoolName;
+
+        return query;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Cursor cursor = DatabaseHelper.getInstance(ListActivity.this).searchPreschools(query);
+
+            listView = (ListView) findViewById(R.id.school_results_list);
+
+            if (cursorAdapter == null) {
+                cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+                listView.setAdapter(cursorAdapter);
+            } else {
+                cursorAdapter.changeCursor(cursor);
+            }
+        }
     }
 
     // trying to figure out how to add images to the preshool objects in the image array
@@ -61,18 +107,18 @@ public class ListActivity extends AppCompatActivity {
      */
     private void initViews() {
         listView = (ListView) findViewById(R.id.school_results_list);
-        schoolAdapter = new SchoolAdapter(ListActivity.this, preSchools);
-        listView.setAdapter(schoolAdapter);
     }
 
     /**
-     * setting onclick listener for item click in activity
+     * setting onclick listener for list item click
      */
-    private void setOnClickListener() {
+    private void setOnClickListener(final Cursor cursor) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                cursor.moveToPosition(position);
+                intent.putExtra(RECORD_ID, cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_ID)));
                 startActivity(intent);
             }
         });
@@ -80,48 +126,19 @@ public class ListActivity extends AppCompatActivity {
 
     /**
      * filling toolbar with menu options, and setting the actions for them
-     * http://developer.android.com/training/appbar/action-views.html
      *
      * @param menu
      * @return
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_list_activity, menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_list_activity, menu);
 
-        // action view when user clicks on filter icon
-        MenuItem searchItem = menu.findItem(R.id.action_filter);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Define the listener
-        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                // Do something when action item collapses
-                return true;  // Return true to collapse action view
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do something when expanded
-                return true;  // Return true to expand action view
-            }
-        };
-
-        // Get the MenuItem for the action item
-        MenuItem actionMenuItem = menu.findItem(R.id.action_filter);
-
-        // Assign the listener to that action item
-        MenuItemCompat.setOnActionExpandListener(actionMenuItem, expandListener);
-
-        // Any other things you have to do when creating the options menu…
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_item).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 }

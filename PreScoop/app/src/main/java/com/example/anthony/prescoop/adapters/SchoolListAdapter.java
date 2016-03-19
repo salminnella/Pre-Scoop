@@ -18,11 +18,14 @@ import java.util.List;
 /**
  * Created by anthony on 3/12/16.
  */
-public class SchoolAdapter extends ArrayAdapter<PreSchool> {
+
+//TODO can now delete this file
+//this has been replaced with the cursor adapter
+public class SchoolListAdapter extends ArrayAdapter<PreSchool> {
     List<PreSchool> schools;
 
 
-    public SchoolAdapter(Context context, ArrayList<PreSchool> objects) {
+    public SchoolListAdapter(Context context, ArrayList<PreSchool> objects) {
         super(context, -1, objects);
         this.schools = objects;
     }
@@ -30,17 +33,17 @@ public class SchoolAdapter extends ArrayAdapter<PreSchool> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_schools, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_items, parent, false);
 
         rowItem.setBackgroundColor(Color.WHITE);
-        TextView schoolNameTextView = (TextView) rowItem.findViewById(R.id.school_name_list);
-        TextView schoolAddressTextView = (TextView) rowItem.findViewById(R.id.school_address_list);
-        ImageView schoolRatingImageView = (ImageView) rowItem.findViewById(R.id.school_rating_list);
+        TextView schoolNameTextView = (TextView) rowItem.findViewById(R.id.name_text_list_items);
+        TextView schoolAddressTextView = (TextView) rowItem.findViewById(R.id.address_text_list_items);
+        ImageView schoolRatingImageView = (ImageView) rowItem.findViewById(R.id.rating_image_list_items);
 
         PreSchool preschool = schools.get(position);
 
         schoolNameTextView.setText(preschool.getName());
-        schoolAddressTextView.setText(preschool.getAddress());
+        schoolAddressTextView.setText(preschool.getStreetAddress());
 
         if (preschool.getRating() == 5) {
             schoolRatingImageView.setImageResource(R.drawable.five_stars);

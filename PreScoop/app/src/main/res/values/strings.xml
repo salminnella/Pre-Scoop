@@ -15,6 +15,8 @@
     <string name="description_label_detail">Description</string>
     <string name="action_favorite">Favorite This Preschool</string>
     <string name="action_search">Filter List Set</string>
+    <string name="search_hint">Filter list by....</string>
+    <string name="school_name_text">School Name</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->
