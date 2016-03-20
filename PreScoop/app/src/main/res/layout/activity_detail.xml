@@ -16,6 +16,12 @@
         android:layout_height="200dp"
         android:src="@drawable/urbanites2"
         android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/favorite_school_detail"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:text="0"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

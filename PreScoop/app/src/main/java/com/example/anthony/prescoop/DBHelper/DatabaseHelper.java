@@ -171,7 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Retrieves all the preschools from the database, and returns a cursor
      * @return
      */
-    public Cursor getPreschools() {
+    public Cursor getAllPreschools() {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, null, null);
@@ -257,5 +257,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return new PreSchool(schoolName, schoolAddress, null, null, null, null, null, null, schoolDescription, 4, 0, schoolImages);
 
+    }
+
+    public void setFavoriteSchool(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_FAVORITE, 1);
+
+        db.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[] {String.valueOf(id)});
     }
 }

@@ -1,5 +1,6 @@
 package com.example.anthony.prescoop.activity;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ public class DetailActivity extends AppCompatActivity {
     ImageView schoolRating;
     TextView schoolDescription;
     ImageView schoolImage2;
+
+    TextView favorite;
 
 
 
@@ -62,6 +65,8 @@ public class DetailActivity extends AppCompatActivity {
         schoolDescription = (TextView) findViewById(R.id.description_info_detail);
         schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
 
+        favorite = (TextView) findViewById(R.id.favorite_school_detail);
+
     }
 
 //    private Cursor retreiveSchoolDetails(int id) {
@@ -73,7 +78,6 @@ public class DetailActivity extends AppCompatActivity {
 //        if (id > 0) {
 //            cursor = helper.findPreschoolById(id);
 //        }
-//        //TODO still need a null check on the cursor
 //        return cursor;
 //
 //    }
@@ -93,6 +97,13 @@ public class DetailActivity extends AppCompatActivity {
             case R.id.action_favorite:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
+
+                helper.setFavoriteSchool(id);
+                Cursor cursor = helper.findPreschoolById(id);
+
+                favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+
                 return true;
 
             default:

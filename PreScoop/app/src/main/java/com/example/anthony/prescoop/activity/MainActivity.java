@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private void fillTempPreschool() {
         DatabaseHelper db = new DatabaseHelper(this);
         // do a get on preschools
-        Cursor cursor = db.getPreschools();
+        Cursor cursor = db.getAllPreschools();
         cursor.moveToFirst();
 
         // if the cursor result is empty, insert the schools below

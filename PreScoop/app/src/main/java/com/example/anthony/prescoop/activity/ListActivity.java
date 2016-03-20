@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -17,70 +16,79 @@ import android.widget.ListView;
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.DBCursorAdapter;
-import com.example.anthony.prescoop.adapters.SchoolListAdapter;
-import com.example.anthony.prescoop.models.PreSchool;
-
-import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
     public static final String RECORD_ID = "id";
 
-    ArrayList<PreSchool> preSchools;
     ListView listView;
-    SchoolListAdapter schoolListAdapter;
-
     DBCursorAdapter cursorAdapter;
+    String query;
+    Cursor cursor;  // TODO: this has not been closed properly
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true); //enables the up/back button in the action bar
 
-        initViews();
+        initializeViews();
 
         //receive the search criteria from main, and performs the search
-        String query = receiveIntent();
-        Cursor cursor = searchForSchools(query);
-
-        //listview connects to the adapter
-        cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
-        listView.setAdapter(cursorAdapter);
-
-        handleIntent(getIntent());
-
+        receiveIntentFromMain();
 
         setOnClickListener(cursor);
+
+        handleIntent(getIntent());
     }
 
-    private Cursor searchForSchools(String query) {
+    /**
+     * initializing all views in activity
+     */
+    private void initializeViews() {
+        listView = (ListView) findViewById(R.id.school_results_list);
+    }
 
+    /**
+     * receives the search criteria from main activity
+     */
+    private void receiveIntentFromMain() {
+        Intent intentFromMain = getIntent();
+        if (intentFromMain == null) {
+            return;
+        }
+        query = intentFromMain.getStringExtra(MainActivity.SCHOOL_NAME);
+
+        searchForSchools(query);
+    }
+
+    private void searchForSchools(String query) {
         DatabaseHelper searchHelper = DatabaseHelper.getInstance(ListActivity.this);
-        Cursor cursor = null;
 
         if (!query.isEmpty()) {
             cursor = searchHelper.searchPreschools(query);
         } else {
-            cursor = searchHelper.getPreschools();
+            cursor = searchHelper.getAllPreschools();
         }
 
-        return cursor;
+        //listview connects to the adapter
+        cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+        listView.setAdapter(cursorAdapter);
     }
 
-    private String receiveIntent() {
-        Intent intentFromMain = getIntent();
-        String schoolName = intentFromMain.getStringExtra(MainActivity.SCHOOL_NAME);
-        String query = schoolName;
 
-        return query;
-    }
-
+    /**
+     * Takes the filter string from the action bar and passes it to handleIntent to perform a new
+     * search from the database.
+     * @param intent
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
     }
 
+    /**
+     * Filters the search result list
+     * @param intent
+     */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -97,20 +105,8 @@ public class ListActivity extends AppCompatActivity {
         }
     }
 
-    // trying to figure out how to add images to the preshool objects in the image array
-    private void addImages() {
-        //preSchools.add();
-    }
-
     /**
-     * initializing all views in activity
-     */
-    private void initViews() {
-        listView = (ListView) findViewById(R.id.school_results_list);
-    }
-
-    /**
-     * setting onclick listener for list item click
+     * setting listener for list item click
      */
     private void setOnClickListener(final Cursor cursor) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,6 +119,7 @@ public class ListActivity extends AppCompatActivity {
             }
         });
     }
+
 
     /**
      * filling toolbar with menu options, and setting the actions for them
