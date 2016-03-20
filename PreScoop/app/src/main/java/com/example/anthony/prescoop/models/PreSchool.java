@@ -50,6 +50,22 @@ public class PreSchool {
         this.region = region;
     }
 
+    public PreSchool(String name, String streetAddress, String city, String state, String zipCode, String region, String type, String phoneNumber, int description, int rating, double price, ArrayList<Integer> images) {
+        this.name = name;
+        this.streetAddress = streetAddress;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.region = region;
+        this.type = type;
+        this.phoneNumber = phoneNumber;
+        this.description = description;
+        this.rating = rating;
+        this.price = price;
+        this.images = images;
+        //this.photo1 = photo1;
+    }
+
     public String getName() {
         return name;
     }
@@ -122,8 +138,8 @@ public class PreSchool {
         this.phoneNumber = phoneNumber;
     }
 
-    public ArrayList<Integer> getImages() {
-        return images;
+    public Integer getImages(int position) {
+        return images.get(position);
     }
 
     public void setImages(ArrayList<Integer> images) {

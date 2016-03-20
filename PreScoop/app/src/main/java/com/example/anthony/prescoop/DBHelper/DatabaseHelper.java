@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.anthony.prescoop.models.PreSchool;
+
+import java.util.ArrayList;
+
 /**
  * Created by anthony on 3/15/16.
  */
@@ -36,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_PHOTO_5 = "photo5";
     public static final String COL_PHOTO_5_DESCRIPTION = "photo5Desc";
     public static final String COL_FAVORITE = "favorite";
-    // TODO add favorite column
+    // TODO perhaps a contact column or website link column
 
     // builds all columns in one array for queries later on
     public static final String[] COLUMNS = {COL_ID, COL_NAME, COL_DESCRIPTION, COL_MONTHLY_PRICE,
@@ -98,10 +102,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // i know this should really have a backup data to temp area,
+        // then upgrade database, then restore data
         db.execSQL("DROP TABLE IF EXISTS " + PRESCHOOL_TABLE_NAME);
         this.onCreate(db);
     }
 
+    /**
+     * This is used in the main activity, to populate the database with some preschools.
+     * We've been using static db's in the class exercises and labs, but wanted a way to have it
+     * start with some schools in the database.
+     *
+     * @param name
+     * @param schoolDescription
+     * @param price
+     * @param address
+     * @param city
+     * @param state
+     * @param zip
+     * @param type
+     * @param rating
+     * @param photo1
+     * @param photo1Description
+     * @param photo2
+     * @param photo2Description
+     * @param photo3
+     * @param photo3Description
+     * @param photo4
+     * @param photo4Description
+     * @param photo5
+     * @param photo5Description
+     */
     public void insertIntoPreschools(String name, int schoolDescription, double price, String address, String city,
                                      String state, String zip, String type, int rating, int photo1, String photo1Description,
                                      int photo2, String photo2Description, int photo3, String photo3Description, int photo4,
@@ -137,18 +168,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Retrieves preschools from the database in a cursor
+     * Retrieves all the preschools from the database, and returns a cursor
      * @return
      */
     public Cursor getPreschools() {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, null, null);
-        cursor.moveToFirst();
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
 
         return cursor;
     }
 
+    /**
+     * from the main activity, a query string is generated from the user requested
+     * search criteria and passed to this search method.
+     *
+     * @param query
+     * @return
+     */
     public Cursor searchPreschools(String query) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -159,7 +200,62 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null);
-        cursor.moveToFirst();
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
         return cursor;
+    }
+
+    /**
+     * From the details activity, a search based on the id of the preschool
+     * is performed to retrieve all necessary details to display to the user
+     *
+     * @param id
+     * @return
+     */
+    public Cursor findPreschoolById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS,
+                COL_ID + "=" + id,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public PreSchool retrievePreschool(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS,
+                COL_ID + "=" + id,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        String schoolName = cursor.getString(cursor.getColumnIndex(COL_NAME));
+        int schoolDescription = cursor.getInt(cursor.getColumnIndex(COL_DESCRIPTION));
+        String schoolAddress = cursor.getString(cursor.getColumnIndex(COL_STREET_ADDRESS));
+
+        ArrayList<Integer> schoolImages = new ArrayList<>();
+        schoolImages.add(cursor.getInt(cursor.getColumnIndex(COL_PHOTO_1)));
+        schoolImages.add(cursor.getInt(cursor.getColumnIndex(COL_PHOTO_2)));
+
+        cursor.close();
+
+        return new PreSchool(schoolName, schoolAddress, null, null, null, null, null, null, schoolDescription, 4, 0, schoolImages);
+
     }
 }

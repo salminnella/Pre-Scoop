@@ -37,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initViews();
+        initializeViews();
         setOnClickListeners();
 
         fillTempPreschool();
 
     }
 
-    private void initViews() {
+    private void initializeViews() {
         ratingText = (TextView) findViewById(R.id.rating_text_main);
         rangeText = (TextView) findViewById(R.id.range_text_main);
         addressText = (TextView) findViewById(R.id.address_text_main);
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.close();
         } else {
-            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 0.0, "816 Diablo Rd", "Danville", "CA", "94526", "public", 5, 0, null, 0, null, 0, null, 0, null, 0, null);
+            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 0.0, "816 Diablo Rd", "Danville", "CA", "94526", "public", 5, R.drawable.acorn_main_photo, null, R.drawable.acorn_photo_two, null, 0, null, 0, null, 0, null);
             db.insertIntoPreschools("The Quarry Lane School", R.string.quarry_description, 1400.00, "3750 Boulder St.", "Pleasanton", "CA", "94568", "public", 3, 0, null, 0, null, 0, null, 0, null, 0, null);
             db.insertIntoPreschools("San Francisco Montessori Academy", R.string.sf_montesorri_description, 0.00, "1566 32nd Ave.", "San Francisco", "CA", "94122", "private", 5, 0, null, 0, null, 0, null, 0, null, 0, null);
             db.insertIntoPreschools("Sunset Co-op Nursery School", R.string.sunset_co_op_description, 305.00, "4245 Lawton St.", "San Francisco", "CA", "94122", "co-op", 4, 0, null, 0, null, 0, null, 0, null, 0, null);
