@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
@@ -26,6 +28,8 @@ public class ListActivity extends AppCompatActivity {
     DBCursorAdapter cursorAdapter;
     String query;
     Cursor cursor;  // TODO: this has not been closed properly
+    Boolean isViewingFavorites = false;
+    TextView vewingFavsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +41,7 @@ public class ListActivity extends AppCompatActivity {
         //receive the search criteria from main, and performs the search
         receiveIntentFromMain();
 
-        setOnClickListener(cursor);
+        setOnClickListener();
 
         handleIntent(getIntent());
     }
@@ -47,6 +51,7 @@ public class ListActivity extends AppCompatActivity {
      */
     private void initializeViews() {
         listView = (ListView) findViewById(R.id.school_results_list);
+        vewingFavsText = (TextView) findViewById(R.id.favs_are_on_list_text);
     }
 
     /**
@@ -94,7 +99,7 @@ public class ListActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Cursor cursor = DatabaseHelper.getInstance(ListActivity.this).searchPreschools(query);
+            cursor = DatabaseHelper.getInstance(ListActivity.this).searchPreschools(query);
 
             listView = (ListView) findViewById(R.id.school_results_list);
 
@@ -110,7 +115,7 @@ public class ListActivity extends AppCompatActivity {
     /**
      * setting listener for list item click
      */
-    private void setOnClickListener(final Cursor cursor) {
+    private void setOnClickListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -142,12 +147,36 @@ public class ListActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_find_favorites:
+                if (isViewingFavorites) {
+                    //returns the full list of schools
+                    searchForSchools(query);
+                    isViewingFavorites = false;
+                    vewingFavsText.setVisibility(TextView.INVISIBLE);
+
+                    cursorAdapter.swapCursor(cursor);
+                } else {
+                    // finds just the favorite schools
+                    Cursor cursor = DatabaseHelper.getInstance(ListActivity.this).findFavoritePreschools();
+                    isViewingFavorites = true;
+                    vewingFavsText.setVisibility(TextView.VISIBLE);
+                    cursorAdapter.swapCursor(cursor);
+                }
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                searchForSchools(query);
-                //cursorAdapter.changeCursor(cursor);
+                //searchForSchools(query);
+                //cursorAdapter.swapCursor(cursor);
             }
         }
     }

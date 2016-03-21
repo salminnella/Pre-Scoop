@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_activity_detail, menu);
+        inflater.inflate(R.menu.menu_detail_activity, menu);
         return true;
     }
 
@@ -86,14 +87,25 @@ public class DetailActivity extends AppCompatActivity {
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
                 DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
-
-                helper.setFavoriteSchool(id);
                 Cursor cursor = helper.findPreschoolById(id);
+                cursor.moveToFirst();
+                if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 0) {
+                    helper.setFavoriteSchool(id);
+                    cursor = helper.findPreschoolById(id);
+                    favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+                } else {
+                    //remove favorite school
+                    helper.removeFavoriteSchool(id);
+                    cursor = helper.findPreschoolById(id);
+                    favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+                }
 
-                favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+                Log.i("DetailActivity", "Cursor favorite: " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+
+                cursor.close();
                 break;
 
-            case android.R.id.home:
+            case android.R.id.home: //TODO: don't need the activity result anymore
                 // make sure the list is refreshed after user clicks back button
                 Intent backToList = getIntent();
                 if (backToList == null) {

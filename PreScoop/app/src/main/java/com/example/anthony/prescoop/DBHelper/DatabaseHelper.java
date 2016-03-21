@@ -241,8 +241,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
         return cursor;
-
-        //TODO: close cursor?
     }
 
     public PreSchool retrievePreschool(int id) {
@@ -290,5 +288,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_FAVORITE, 1);
 
         db.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[] {String.valueOf(id)});
+    }
+
+    public void removeFavoriteSchool(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_FAVORITE, 0);
+
+        db.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public Cursor findFavoritePreschools() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME,
+                COLUMNS,
+                COL_FAVORITE + " = 1 ",
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return cursor;
     }
 }

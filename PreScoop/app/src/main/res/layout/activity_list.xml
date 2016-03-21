@@ -10,11 +10,21 @@
     tools:context=".activity.ListActivity"
     android:background="@drawable/blackboard">
 
+    <TextView
+        android:id="@+id/favs_are_on_list_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/your_favs"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"/>
+
     <ListView
         android:id="@+id/school_results_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:dividerHeight="2.0dp"
-        android:layout_marginTop="10dp"></ListView>
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/favs_are_on_list_text"></ListView>
 
 </RelativeLayout>
