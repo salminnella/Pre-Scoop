@@ -32,10 +32,15 @@ public class DBCursorAdapter extends android.widget.CursorAdapter {
             TextView preschoolName = (TextView) view.findViewById(R.id.name_text_list_items);
             TextView preschoolAddress = (TextView) view.findViewById(R.id.address_text_list_items);
             ImageView preschoolRating = (ImageView) view.findViewById(R.id.rating_image_list_items);
+            ImageView preschoolFavorite = (ImageView) view.findViewById(R.id.favorite_image_list_items);
 
             preschoolName.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_NAME)));
             preschoolAddress.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_STREET_ADDRESS)));
             preschoolRating.setImageResource(getRatingImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_RATING))));
+
+            if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 1) {
+                preschoolFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            }
 
         }
 

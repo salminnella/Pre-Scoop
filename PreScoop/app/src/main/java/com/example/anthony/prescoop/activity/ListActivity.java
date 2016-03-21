@@ -19,6 +19,8 @@ import com.example.anthony.prescoop.adapters.DBCursorAdapter;
 
 public class ListActivity extends AppCompatActivity {
     public static final String RECORD_ID = "id";
+    public static final String QUERY = "searchQuery";
+    private static final int REQUEST_CODE = 42;
 
     ListView listView;
     DBCursorAdapter cursorAdapter;
@@ -115,7 +117,7 @@ public class ListActivity extends AppCompatActivity {
                 Intent intent = new Intent(ListActivity.this, DetailActivity.class);
                 cursor.moveToPosition(position);
                 intent.putExtra(RECORD_ID, cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_ID)));
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
     }
@@ -137,5 +139,16 @@ public class ListActivity extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                searchForSchools(query);
+                //cursorAdapter.changeCursor(cursor);
+            }
+        }
     }
 }

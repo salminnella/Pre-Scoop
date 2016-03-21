@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // for the images on the rating drop down spinner
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
         // Create a custom adapter for rating drop down
-        ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
+        ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.pixel, R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
         //connect the two
         ratingSpinner.setAdapter(ratingAdapter);
     }

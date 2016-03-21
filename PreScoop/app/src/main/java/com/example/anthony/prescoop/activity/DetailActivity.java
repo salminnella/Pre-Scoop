@@ -1,8 +1,8 @@
 package com.example.anthony.prescoop.activity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,18 +30,20 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true); //enables the up/back button in actionbar
 
-
-        // get the id from the clicked item in ListActivity
-        id = getIntent().getIntExtra(ListActivity.RECORD_ID, -1);
+        receiveIntentExtras();
 
         initializeViews();
         populateSchoolDetails();
 
 
 
+    }
+
+    private void receiveIntentExtras() {
+
+        // get the id from the clicked item in ListActivity
+        id = getIntent().getIntExtra(ListActivity.RECORD_ID, -1);
     }
 
     private void populateSchoolDetails() {
@@ -89,13 +91,25 @@ public class DetailActivity extends AppCompatActivity {
                 Cursor cursor = helper.findPreschoolById(id);
 
                 favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+                break;
 
-                return true;
+            case android.R.id.home:
+                // make sure the list is refreshed after user clicks back button
+                Intent backToList = getIntent();
+                if (backToList == null) {
+                    break;
+                }
+                setResult(RESULT_OK, backToList);
+                finish();
+                break;
 
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
+
         }
+
+        return true;
     }
 }
