@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
@@ -19,10 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String SCHOOL_NAME = "schoolName";
 
-    TextView ratingText;
-    TextView rangeText;
-    TextView addressText;
-    TextView budgetText;
     EditText addressEdit;
     EditText budgetEdit;
     EditText schoolNameEdit;
@@ -45,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        ratingText = (TextView) findViewById(R.id.rating_text_main);
-        rangeText = (TextView) findViewById(R.id.range_text_main);
-        addressText = (TextView) findViewById(R.id.address_text_main);
-        budgetText = (TextView) findViewById(R.id.budget_text);
         addressEdit = (EditText) findViewById(R.id.address_edit_main);
         budgetEdit = (EditText) findViewById(R.id.budget_edit);
         schoolNameEdit = (EditText) findViewById(R.id.school_name_main_edit);
@@ -93,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.close();
         } else {
-            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 0.0, "816 Diablo Rd", "Danville", "CA", "94526", "public", 5, R.drawable.acorn_main_photo, null, R.drawable.acorn_photo_two, null, 0, null, 0, null, 0, null);
-            db.insertIntoPreschools("The Quarry Lane School", R.string.quarry_description, 1400.00, "3750 Boulder St.", "Pleasanton", "CA", "94568", "public", 3, 0, null, 0, null, 0, null, 0, null, 0, null);
-            db.insertIntoPreschools("San Francisco Montessori Academy", R.string.sf_montesorri_description, 0.00, "1566 32nd Ave.", "San Francisco", "CA", "94122", "private", 5, 0, null, 0, null, 0, null, 0, null, 0, null);
-            db.insertIntoPreschools("Sunset Co-op Nursery School", R.string.sunset_co_op_description, 305.00, "4245 Lawton St.", "San Francisco", "CA", "94122", "co-op", 4, 0, null, 0, null, 0, null, 0, null, 0, null);
+            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 0.0, "816 Diablo Rd", "Danville", "CA", "94526", "public", 5, "East Bay", "925.837.1145", "2-5 years", R.drawable.acorn_main_photo, null, R.drawable.acorn_photo_two, null, 0, null, 0, null, 0, null, 0);
+            db.insertIntoPreschools("The Quarry Lane School", R.string.quarry_description, 1400.00, "3750 Boulder St.", "Pleasanton", "CA", "94568", "public", 3, "Easy Bay", "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
+            db.insertIntoPreschools("San Francisco Montessori Academy", R.string.sf_montesorri_description, 0.00, "1566 32nd Ave.", "San Francisco", "CA", "94122", "private", 5, "San Francisco", "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
+            db.insertIntoPreschools("Sunset Co-op Nursery School", R.string.sunset_co_op_description, 305.00, "4245 Lawton St.", "San Francisco", "CA", "94122", "co-op", 4, "San Francisco", "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
 
             cursor.close();
         }

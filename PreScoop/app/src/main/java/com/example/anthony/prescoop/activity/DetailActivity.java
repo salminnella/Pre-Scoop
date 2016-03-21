@@ -51,11 +51,10 @@ public class DetailActivity extends AppCompatActivity {
         PreSchool retrievedPreschool = helper.retrievePreschool(id);
         // set the fields using the preschool object
         schoolAddress.setText(retrievedPreschool.getStreetAddress());
-        schoolDescription.setText(retrievedPreschool.getDescription());
+        schoolDescription.setText(retrievedPreschool.getSchoolDescription());
+        favorite.setText(String.valueOf(retrievedPreschool.isFavorite()));
         defaultSchoolImage.setImageResource(retrievedPreschool.getImages(0));
         schoolImage2.setImageResource(retrievedPreschool.getImages(1));
-
-
     }
 
     private void initializeViews() {
@@ -68,19 +67,6 @@ public class DetailActivity extends AppCompatActivity {
         favorite = (TextView) findViewById(R.id.favorite_school_detail);
 
     }
-
-//    private Cursor retreiveSchoolDetails(int id) {
-//
-//        // get the database instance
-//        DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
-//        Cursor cursor = null;
-//
-//        if (id > 0) {
-//            cursor = helper.findPreschoolById(id);
-//        }
-//        return cursor;
-//
-//    }
 
 
     // filling toolbar with menu options, and setting the actions for them

@@ -21,6 +21,7 @@
 
     <!-- this is the data for the range drop down in MainActivity -->
     <string-array name="range_array">
+        <item>Select A Range</item>
         <item>1 Mile</item>
         <item>5 Miles</item>
         <item>10 Miles</item>

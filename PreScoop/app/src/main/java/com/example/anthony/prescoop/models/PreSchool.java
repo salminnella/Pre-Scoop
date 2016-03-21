@@ -14,24 +14,24 @@ public class PreSchool {
     private String region;
     private String type;
     private String phoneNumber;
-    private int description;
+    private String ageGroup;
     private String photo1Description;
     private String photo2Description;
     private String photo3Description;
     private String photo4Description;
     private String photo5Description;
 
+    private int schoolDescription;
     private int photo1;
     private int photo2;
     private int photo3;
     private int photo4;
     private int photo5;
     private int rating;
-    private int ageGroup;   // TODO: add to database
 
     private ArrayList<Integer> images;
     private double price;
-    private boolean favorite;
+    private int favorite;
 
     public PreSchool() {
 
@@ -41,16 +41,7 @@ public class PreSchool {
         this.name = name;
     }
 
-    public PreSchool(String name, String streetAddress, double price, int description, int rating, String region) {
-        this.name = name;
-        this.streetAddress = streetAddress;
-        this.price = price;
-        this.description = description;
-        this.rating = rating;
-        this.region = region;
-    }
-
-    public PreSchool(String name, String streetAddress, String city, String state, String zipCode, String region, String type, String phoneNumber, int description, int rating, double price, ArrayList<Integer> images) {
+    public PreSchool(String name, int schoolDescription, double price, String streetAddress, String city, String state, String zipCode, String phoneNumber, String region, String type, String ageGroup, int rating, int favorite, ArrayList<Integer> images) {
         this.name = name;
         this.streetAddress = streetAddress;
         this.city = city;
@@ -59,11 +50,12 @@ public class PreSchool {
         this.region = region;
         this.type = type;
         this.phoneNumber = phoneNumber;
-        this.description = description;
+        this.ageGroup = ageGroup;
+        this.schoolDescription = schoolDescription;
         this.rating = rating;
-        this.price = price;
         this.images = images;
-        //this.photo1 = photo1;
+        this.price = price;
+        this.favorite = favorite;
     }
 
     public String getName() {
@@ -90,12 +82,12 @@ public class PreSchool {
         this.price = price;
     }
 
-    public int getDescription() {
-        return description;
+    public int getSchoolDescription() {
+        return schoolDescription;
     }
 
-    public void setDescription(int description) {
-        this.description = description;
+    public void setSchoolDescription(int schoolDescription) {
+        this.schoolDescription = schoolDescription;
     }
 
     public int getRating() {
@@ -114,11 +106,11 @@ public class PreSchool {
         this.region = region;
     }
 
-    public int getAgeGroup() {
+    public String getAgeGroup() {
         return ageGroup;
     }
 
-    public void setAgeGroup(int ageGroup) {
+    public void setAgeGroup(String ageGroup) {
         this.ageGroup = ageGroup;
     }
 
@@ -146,11 +138,11 @@ public class PreSchool {
         this.images = images;
     }
 
-    public boolean isFavorite() {
+    public int isFavorite() {
         return favorite;
     }
 
-    public void setFavorite(boolean favorite) {
+    public void setFavorite(int favorite) {
         this.favorite = favorite;
     }
 
