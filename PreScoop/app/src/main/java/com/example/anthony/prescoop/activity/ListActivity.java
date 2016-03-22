@@ -20,18 +20,27 @@ import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.DBCursorAdapter;
 
 public class ListActivity extends AppCompatActivity {
-    public static final String RECORD_ID = "id";
-    public static final String QUERY = "searchQuery";
-    private static final int REQUEST_CODE = 42;
-    private static final int ERROR_CODE = -1;
+    public static final String RECORD_ID = "id"; // passed to the details activity to find the preschool
+    private static final int REQUEST_CODE = 42;  // used activityResult, to refresh list from details
 
+    //holds the results from the search criteria entered in Main
     ListView listView;
-    DBCursorAdapter cursorAdapter;
+    //holds the filter text within the actionbar
     String query;
-    Cursor cursor;  // TODO: this has not been closed properly
-    Boolean isViewingFavorites = false;
+    // used as a kind of header when user wants to see just the favorites
     TextView vewingFavsText;
+    Boolean isViewingFavorites = false;
+
+    // database items
     DatabaseHelper searchHelper = DatabaseHelper.getInstance(ListActivity.this);
+    DBCursorAdapter cursorAdapter;
+    Cursor cursor;
+
+    // variables used in the sql searches
+    String name;
+    String rating;
+    String range;
+    String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +49,6 @@ public class ListActivity extends AppCompatActivity {
 
         initializeViews();
 
-        //receive the search criteria from main, and performs the search
         receiveIntentFromMain();
 
         setOnClickListener();
@@ -64,14 +72,25 @@ public class ListActivity extends AppCompatActivity {
         if (intentFromMain == null) {
             return;
         }
-        //query = intentFromMain.getStringExtra(MainActivity.SEARCH_CRITERIA);
-        String name = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
-        String range = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
-        String rating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
-        String price = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
 
-        //searchForSchools(query);
-        //searchingForSchools(name, range, rating, price);
+        name = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
+        range = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
+        rating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
+        price = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
+        String favs = intentFromMain.getStringExtra(MainActivity.SEARCH_FAVS);
+
+        if (favs.equals("findFavs")) {
+            cursor = searchHelper.findFavoritePreschools();
+            isViewingFavorites = true;
+            vewingFavsText.setVisibility(TextView.VISIBLE);
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        } else {
+            performDatabaseSearch(name, range, rating, price);
+        }
+    }
+
+    private void performDatabaseSearch(String name, String range, String rating, String price) {
         if (!range.equals("0") && !rating.equals("0") && !price.equals("")) {
             searchByRangeRatingPrice(range, rating, price);
         } else if (!name.equals("")) {
@@ -132,8 +151,6 @@ public class ListActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void searchForAllSchools() {
         cursor = searchHelper.getAllPreschools();
         //listview connects to the adapter
@@ -142,32 +159,7 @@ public class ListActivity extends AppCompatActivity {
             listView.setAdapter(cursorAdapter);
         }
     }
-
-    private void searchForSchools(String query) {
-        if (!query.isEmpty()) {
-            cursor = searchHelper.searchPreschoolsRawQuery("select * from preschools Where name LIKE \"\" or range <= 15 AND rating >= 3");
-        } else {
-            cursor = searchHelper.getAllPreschools();
-        }
-
-        //listview connects to the adapter
-        cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
-        listView.setAdapter(cursorAdapter);
-    }
-
-    private void searchingForSchools(String name, String range, String price, String rating) {
-        if (rating.equals("0")) {
-            rating = "";
-        }
-
-        cursor = searchHelper.searchPreschools(name, range,  price, rating);
-
-        //listview connects to the adapter
-        cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
-        listView.setAdapter(cursorAdapter);
-    }
-
-
+    
     /**
      * Takes the filter string from the action bar and passes it to handleIntent to perform a new
      * search from the database.
@@ -208,6 +200,9 @@ public class ListActivity extends AppCompatActivity {
                 Intent intent = new Intent(ListActivity.this, DetailActivity.class);
                 cursor.moveToPosition(position);
                 intent.putExtra(RECORD_ID, cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_ID)));
+                if (isViewingFavorites) {
+                    vewingFavsText.setVisibility(TextView.INVISIBLE);
+                }
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -226,7 +221,7 @@ public class ListActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu_list_activity, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_item).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_list_search_item).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
@@ -235,10 +230,15 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_find_favorites:
+            case R.id.menu_list_find_favorites:
                 if (isViewingFavorites) {
                     //returns the full list of schools
-                    searchForSchools(query);
+                    //searchForSchools(query);
+                    if (name != null) {
+                        performDatabaseSearch(name, range, rating, price);
+                    } else {
+                        searchForAllSchools();
+                    }
                     isViewingFavorites = false;
                     vewingFavsText.setVisibility(TextView.INVISIBLE);
 
@@ -250,8 +250,6 @@ public class ListActivity extends AppCompatActivity {
                     vewingFavsText.setVisibility(TextView.VISIBLE);
                     cursorAdapter.swapCursor(cursor);
                 }
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -260,8 +258,8 @@ public class ListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-
-                receiveIntentFromMain();
+                // refresh the list for any new favs
+                performDatabaseSearch(name, range, rating, price);
             }
         }
     }

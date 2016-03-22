@@ -185,7 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllPreschools() {
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, null, null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
 
         if (cursor != null) {
             cursor.moveToFirst();
@@ -237,7 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -251,7 +251,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -278,7 +278,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] args = {rating};
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -291,7 +291,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] args = {price};
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -303,7 +303,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] args = {range, rating, price};
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -425,7 +425,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                null,
+                COL_RATING + " DESC",
                 null);
 
         if (cursor != null) {

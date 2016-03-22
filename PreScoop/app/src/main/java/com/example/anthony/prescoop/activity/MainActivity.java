@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String SEARCH_RANGE = "searchRange";
     public static final String SEARCH_RATING = "searchRating";
     public static final String SEARCH_PRICE = "searchPrice";
+    public static final String SEARCH_FAVS = "searchPrice";
+
 
     EditText addressEdit;
     EditText priceEdit;
@@ -144,5 +149,28 @@ public class MainActivity extends AppCompatActivity {
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.five_stars)) rating = 5;
 
         return String.valueOf(rating);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main_activity, menu);
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main_find_favorites:
+                //go to list activity and find all favorites
+                Intent intentForFavs = new Intent(MainActivity.this, ListActivity.class);
+                intentForFavs.putExtra(SEARCH_FAVS, "findFavs");
+                startActivity(intentForFavs);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -7,28 +7,35 @@
         android:id="@+id/name_text_list_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        android:textStyle="bold"
+        android:paddingLeft="5dp"/>
 
     <TextView
         android:id="@+id/address_text_list_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/name_text_list_items"
-        android:layout_below="@+id/name_text_list_items"/>
+        android:layout_below="@+id/name_text_list_items"
+        android:paddingLeft="5dp"/>
 
     <ImageView
         android:id="@+id/rating_image_list_items"
-        android:layout_width="75dp"
-        android:layout_height="30dp"
+        android:layout_width="100dp"
+        android:layout_height="17dp"
         android:layout_alignLeft="@id/address_text_list_items"
-        android:layout_below="@+id/address_text_list_items"/>
+        android:layout_below="@+id/address_text_list_items"
+        android:paddingBottom="2dp"/>
 
     <ImageView
         android:id="@+id/favorite_image_list_items"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignTop="@+id/rating_image_list_items"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:layout_below="@+id/name_text_list_items"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>
