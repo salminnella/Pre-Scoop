@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/menu_find_favorites"
-        android:title="findFavs"
+        android:title="@string/find_favs"
         android:icon="@drawable/ic_favorite_border_black_24dp"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/menu_search_item"
-        android:title="searchItem"
+        android:title="@string/filter_search"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.support.v7.widget.SearchView" />

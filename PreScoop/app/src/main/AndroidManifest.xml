@@ -34,7 +34,8 @@
 
 
         <activity android:name=".activity.DetailActivity"
-            android:parentActivityName=".activity.ListActivity"/>
+            android:parentActivityName=".activity.ListActivity"
+            android:theme="@style/AppTheme.Transparent"/>
     </application>
 
 </manifest>

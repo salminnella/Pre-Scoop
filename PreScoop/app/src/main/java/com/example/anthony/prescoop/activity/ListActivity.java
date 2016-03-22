@@ -23,6 +23,7 @@ public class ListActivity extends AppCompatActivity {
     public static final String RECORD_ID = "id";
     public static final String QUERY = "searchQuery";
     private static final int REQUEST_CODE = 42;
+    private static final int ERROR_CODE = -1;
 
     ListView listView;
     DBCursorAdapter cursorAdapter;
@@ -30,6 +31,7 @@ public class ListActivity extends AppCompatActivity {
     Cursor cursor;  // TODO: this has not been closed properly
     Boolean isViewingFavorites = false;
     TextView vewingFavsText;
+    DatabaseHelper searchHelper = DatabaseHelper.getInstance(ListActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,19 +64,91 @@ public class ListActivity extends AppCompatActivity {
         if (intentFromMain == null) {
             return;
         }
-        query = intentFromMain.getStringExtra(MainActivity.SCHOOL_NAME);
+        query = intentFromMain.getStringExtra(MainActivity.SEARCH_CRITERIA);
+        String name = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
+        String range = String.valueOf(intentFromMain.getIntExtra(MainActivity.SEARCH_RANGE, ERROR_CODE));
+        String rating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
+        String price = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
 
-        searchForSchools(query);
+        //searchForSchools(query);
+        //searchingForSchools(name, range, rating, price);
+
+        if (name != null) {
+            searchByName(name);
+        } else if (!range.equals("0")) {
+            searchByRange(range);
+        } else if (!rating.equals("0")) {
+            searchByRating(rating);
+        } else if (!price.equals("")) {
+            searchByPrice(price);
+        } else {
+            searchForAllSchools();
+        }
+    }
+
+    private void searchByName(String name) {
+        cursor = searchHelper.findPreschoolsByName(name);
+        //listview connects to the adapter
+        if (cursor != null) {
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        }
+    }
+
+    private void searchByRange(String range) {
+        cursor = searchHelper.findPreschoolsByRange(range);
+        //listview connects to the adapter
+        if (cursor != null) {
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        }
+    }
+
+    private void searchByRating(String rating) {
+        cursor = searchHelper.findPreschoolsByRating(rating);
+        //listview connects to the adapter
+        if (cursor != null) {
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        }
+    }
+
+    private void searchByPrice(String price) {
+        cursor = searchHelper.findPreschoolsByPrice(price);
+        //listview connects to the adapter
+        if (cursor != null) {
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        }
+    }
+
+    private void searchForAllSchools() {
+        cursor = searchHelper.getAllPreschools();
+        //listview connects to the adapter
+        if (cursor != null) {
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        }
     }
 
     private void searchForSchools(String query) {
-        DatabaseHelper searchHelper = DatabaseHelper.getInstance(ListActivity.this);
-
         if (!query.isEmpty()) {
-            cursor = searchHelper.searchPreschools(query);
+            cursor = searchHelper.searchPreschoolsRawQuery("select * from preschools Where name LIKE \"\" or range <= 15 AND rating >= 3");
         } else {
             cursor = searchHelper.getAllPreschools();
         }
+
+        //listview connects to the adapter
+        cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+        listView.setAdapter(cursorAdapter);
+    }
+
+    private void searchingForSchools(String name, String range, String rating, String price) {
+        if (rating.equals("0")) {
+            rating = "";
+        }
+
+        cursor = searchHelper.searchPreschools(name, range, rating, price);
 
         //listview connects to the adapter
         cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
@@ -99,7 +173,7 @@ public class ListActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            cursor = DatabaseHelper.getInstance(ListActivity.this).searchPreschools(query);
+            //cursor = DatabaseHelper.getInstance(ListActivity.this).searchPreschools(query);
 
             listView = (ListView) findViewById(R.id.school_results_list);
 
@@ -159,7 +233,7 @@ public class ListActivity extends AppCompatActivity {
                     cursorAdapter.swapCursor(cursor);
                 } else {
                     // finds just the favorite schools
-                    Cursor cursor = DatabaseHelper.getInstance(ListActivity.this).findFavoritePreschools();
+                    cursor = searchHelper.findFavoritePreschools();
                     isViewingFavorites = true;
                     vewingFavsText.setVisibility(TextView.VISIBLE);
                     cursorAdapter.swapCursor(cursor);
@@ -175,7 +249,7 @@ public class ListActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                //searchForSchools(query);
+                searchForSchools(query);
                 //cursorAdapter.swapCursor(cursor);
             }
         }

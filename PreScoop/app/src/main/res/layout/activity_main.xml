@@ -31,7 +31,7 @@
         android:layout_alignLeft="@+id/school_name_main_text"/>
 
     <TextView
-        android:id="@+id/range_text_main"
+        android:id="@+id/range_main_text"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/string_range_main"
@@ -47,12 +47,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:paddingLeft="5dp"
-        android:layout_below="@+id/range_text_main"
+        android:layout_below="@+id/range_main_text"
         android:layout_alignLeft="@+id/school_name_main_edit"
         android:background="@drawable/rounded_transperant"></Spinner>
 
     <TextView
-        android:id="@+id/address_text_main"
+        android:id="@+id/address_main_text"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
@@ -63,24 +63,24 @@
         android:layout_alignLeft="@+id/school_name_main_edit"/>
 
     <EditText
-        android:id="@+id/address_edit_main"
+        android:id="@+id/address_main_edit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:layout_marginTop="2dp"
-        android:layout_below="@+id/address_text_main"
+        android:layout_below="@+id/address_main_text"
         android:layout_alignLeft="@+id/school_name_main_edit"
         android:background="@drawable/rounded_transperant"/>
 
     <TextView
-        android:id="@+id/rating_text_main"
+        android:id="@+id/rating_main_text"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:layout_marginTop="17dp"
         android:text="@string/string_rating_main"
         android:textColor="@android:color/white"
-        android:layout_below="@+id/address_edit_main"
+        android:layout_below="@+id/address_main_edit"
         android:layout_alignLeft="@+id/school_name_main_edit"/>
 
     <Spinner
@@ -89,12 +89,12 @@
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:layout_marginTop="2dp"
-        android:layout_below="@+id/rating_text_main"
+        android:layout_below="@+id/rating_main_text"
         android:layout_alignLeft="@+id/school_name_main_edit"
         android:background="@drawable/rounded_transperant"></Spinner>
 
     <TextView
-        android:id="@+id/budget_text"
+        android:id="@+id/price_main_text"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
@@ -105,13 +105,13 @@
         android:layout_alignLeft="@+id/school_name_main_edit"/>
 
     <EditText
-        android:id="@+id/budget_edit"
+        android:id="@+id/price_main_edit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:layout_marginTop="2dp"
         android:background="@drawable/rounded_transperant"
-        android:layout_below="@+id/budget_text"
+        android:layout_below="@+id/price_main_text"
         android:layout_alignLeft="@+id/school_name_main_edit"/>
 
     <Button
@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/preshool_search"
-        android:layout_below="@+id/budget_edit"
+        android:layout_below="@+id/price_main_edit"
         android:layout_alignLeft="@+id/school_name_main_edit"
         android:background="@drawable/rounded_corners"/>
 

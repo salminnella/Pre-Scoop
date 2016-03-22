@@ -31,13 +31,14 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+//        ActionBar actionBar = getActionBar();
+//        actionBar.setDisplayShowTitleEnabled(false);
 
         receiveIntentExtras();
 
         initializeViews();
+
         populateSchoolDetails();
-
-
 
     }
 
@@ -100,12 +101,10 @@ public class DetailActivity extends AppCompatActivity {
                     favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
                 }
 
-                Log.i("DetailActivity", "Cursor favorite: " + cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
-
                 cursor.close();
                 break;
 
-            case android.R.id.home: //TODO: don't need the activity result anymore
+            case android.R.id.home:
                 // make sure the list is refreshed after user clicks back button
                 Intent backToList = getIntent();
                 if (backToList == null) {

@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_TYPE = "type";
     public static final String COL_RATING = "rating";
     public static final String COL_REGION = "region";
+    public static final String COL_RANGE = "range";
     public static final String COL_PHONE_NUMBER = "phoneNumber";
     public static final String COL_AGE_GROUP = "ageGroup";
     public static final String COL_PHOTO_1 = "photo1";
@@ -48,11 +49,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // builds all columns in one array for queries later on
     public static final String[] COLUMNS = {COL_ID, COL_NAME, COL_DESCRIPTION, COL_MONTHLY_PRICE,
-            COL_STREET_ADDRESS, COL_CITY, COL_STATE, COL_ZIP, COL_TYPE, COL_RATING, COL_REGION,
+            COL_STREET_ADDRESS, COL_CITY, COL_STATE, COL_ZIP, COL_TYPE, COL_RATING, COL_REGION, COL_RANGE,
             COL_PHONE_NUMBER, COL_AGE_GROUP,COL_PHOTO_1, COL_PHOTO_1_DESCRIPTION, COL_PHOTO_2, COL_PHOTO_2_DESCRIPTION,
             COL_PHOTO_3, COL_PHOTO_3_DESCRIPTION, COL_PHOTO_4, COL_PHOTO_4_DESCRIPTION, COL_PHOTO_5,
             COL_PHOTO_5_DESCRIPTION, COL_FAVORITE};
-
 
 
     // the actual sql statement to create the table
@@ -69,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_TYPE + " TEXT, " +
             COL_RATING + " INT, " +
             COL_REGION + " TEXT, " +
+            COL_RANGE + " INT, " +
             COL_PHONE_NUMBER + " TEXT, " +
             COL_AGE_GROUP + " TEXT, " +
             COL_PHOTO_1 + " INT, " +
@@ -142,10 +143,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param photo5Description
      */
     public void insertIntoPreschools(String name, int schoolDescription, double price, String address, String city,
-                                     String state, String zip, String type, int rating, String region, String phoneNumber,
-                                     String age, int photo1, String photo1Description, int photo2, String photo2Description,
-                                     int photo3, String photo3Description, int photo4, String photo4Description, int photo5,
-                                     String photo5Description, int favorite) {
+                                     String state, String zip, String type, int rating, String region, int range,
+                                     String phoneNumber, String age, int photo1, String photo1Description, int photo2,
+                                     String photo2Description, int photo3, String photo3Description, int photo4,
+                                     String photo4Description, int photo5, String photo5Description, int favorite) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -159,6 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_TYPE, type);
         values.put(COL_RATING, rating);
         values.put(COL_REGION, region);
+        values.put(COL_RANGE, range);
         values.put(COL_PHONE_NUMBER, phoneNumber);
         values.put(COL_AGE_GROUP, age);
         values.put(COL_PHOTO_1, photo1);
@@ -199,24 +201,99 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * from the main activity, a query string is generated from the user requested
      * search criteria and passed to this search method.
      *
-     * @param query
-     * @return
      */
-    public Cursor searchPreschools(String query) {
+    public Cursor searchPreschools(String name, String range, String rating, String price) {
+
+        String where = "name LIKE ? COLLATE NOCASE OR range <= ? OR price <= ? OR rating < ? ";
+        String[] args = { "%" + name + "%", range, price, rating };
+
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS,
-                COL_NAME + " LIKE ? COLLATE NOCASE",
-                new String[]{ "%" + query + "%" },
-                null,
-                null,
-                null,
-                null);
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
-        //TODO: close cursor?
+    }
+
+    public Cursor findPreschoolsByName(String name) {
+
+        String where = "name LIKE ? COLLATE NOCASE ";
+        String[] args = {"%" + name + "%"};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor findPreschoolsByRange(String range) {
+
+        String where = "range <= ? ";
+        String[] args = {range};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor findPreschoolsByAddress(String address) {
+
+        String where = "";
+        String[] args = {address};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor findPreschoolsByRating(String rating) {
+
+        String where = "rating <= ? ";
+        String[] args = {rating};
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor findPreschoolsByPrice(String price) {
+
+        String where = "price > 0 AND price <= ? ";
+        String[] args = {price};
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+
+    public Cursor searchPreschoolsRawQuery(String query) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return cursor;
     }
 
     /**

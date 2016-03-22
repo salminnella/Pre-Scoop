@@ -18,6 +18,8 @@
     <string name="search_hint">Filter list by....</string>
     <string name="school_name_text">School Name</string>
     <string name="your_favs">Your PreSchool Favorites</string>
+    <string name="find_favs">Find Favs</string>
+    <string name="filter_search">Filter List</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->
