@@ -103,7 +103,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PRESCHOOLS_TABLE);
@@ -308,6 +307,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null) {
             cursor.moveToFirst();
         }
+        return cursor;
+    }
+
+    public Cursor filterPreschoolList(String query) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME,
+                COLUMNS,
+                COL_NAME + " LIKE ? COLLATE NOCASE",
+                new String[]{"%" + query + "%"},
+                null,
+                null,
+                null,
+                null);
+        cursor.moveToFirst();
         return cursor;
     }
 

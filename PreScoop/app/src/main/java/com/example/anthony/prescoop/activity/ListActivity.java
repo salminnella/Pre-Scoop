@@ -64,7 +64,7 @@ public class ListActivity extends AppCompatActivity {
         if (intentFromMain == null) {
             return;
         }
-        query = intentFromMain.getStringExtra(MainActivity.SEARCH_CRITERIA);
+        //query = intentFromMain.getStringExtra(MainActivity.SEARCH_CRITERIA);
         String name = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
         String range = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
         String rating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
@@ -184,8 +184,8 @@ public class ListActivity extends AppCompatActivity {
      */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //cursor = DatabaseHelper.getInstance(ListActivity.this).searchPreschools(query);
+            query = intent.getStringExtra(SearchManager.QUERY);
+            cursor = DatabaseHelper.getInstance(ListActivity.this).filterPreschoolList(query);
 
             listView = (ListView) findViewById(R.id.school_results_list);
 
@@ -261,10 +261,7 @@ public class ListActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                //searchForSchools(query);
-                //cursorAdapter.notifyDataSetChanged();
-                //cursorAdapter.updateResults(cursor);
-
+                receiveIntentFromMain();
             }
         }
     }

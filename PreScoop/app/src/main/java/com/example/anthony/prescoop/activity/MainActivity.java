@@ -31,13 +31,6 @@ public class MainActivity extends AppCompatActivity {
     SpinAdapter ratingAdapter;
     Button search;
 
-
-    String schoolNameAsString;
-    String rangeAsString;
-    String ratingAsString;
-    String budgetAsString;
-    String[] arr_address;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,16 +73,11 @@ public class MainActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchQuery = parseSearchCriteria();
-                String name = nameSearch();
-                String range = String.valueOf(appendRangeToQuery());
-                String rating = String.valueOf(ratingSearch());
 
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
-                intent.putExtra(SEARCH_CRITERIA, searchQuery);
-                intent.putExtra(SEARCH_NAME, name);
-                intent.putExtra(SEARCH_RANGE, range);
-                intent.putExtra(SEARCH_RATING, rating);
+                intent.putExtra(SEARCH_NAME, schoolNameEdit.getText().toString());
+                intent.putExtra(SEARCH_RANGE, getRange());
+                intent.putExtra(SEARCH_RATING, getRating());
                 intent.putExtra(SEARCH_PRICE, priceEdit.getText().toString());
                 startActivity(intent);
             }
@@ -116,77 +104,10 @@ public class MainActivity extends AppCompatActivity {
         }
       }
 
-    private String parseSearchCriteria() {
-        String query = "SELECT * FROM preschools ";
-
-        schoolNameAsString = schoolNameEdit.getText().toString();
-        rangeAsString = rangeSpinner.getSelectedItem().toString();
-        arr_address = addressEdit.getText().toString().split(" ", 4);
-        addressEdit.getText().toString();
-        ratingAsString = ratingSpinner.getSelectedItem().toString();
-        budgetAsString = priceEdit.getText().toString();
-        ratingAsString =  String.valueOf(ratingSearch());
-
-        if (!schoolNameAsString.isEmpty()) {
-            query += "WHERE name LIKE \"%" + schoolNameAsString + "%\"";
-        }
-        else if (!rangeAsString.equals("Select A Range")) {
-            query += addRangeToQuery();
-        } else if (!ratingAsString.equals("0")) {
-            query += ratingSpinner.getSelectedItem().toString();
-        } else if (!budgetAsString.isEmpty()) {
-            query += budgetAsString;
-        }
-
-        return query;
-    }
-
-    public String nameSearch() {
-        if (schoolNameEdit.getText().toString().isEmpty()) {
-            return "";
-        }
-        return schoolNameEdit.getText().toString();
-    }
-
-    private String addRangeToQuery() {
+    private String getRange() {
         int rangeAsNumber = 0;
         if (rangeSpinner.getSelectedItem().toString().isEmpty()) {
             return "";
-        }
-
-        switch (rangeSpinner.getSelectedItem().toString()) {
-            case "1 Mile":
-                rangeAsNumber = 1;
-                break;
-            case "5 Miles":
-                rangeAsNumber = 5;
-                break;
-            case "10 Miles":
-                rangeAsNumber = 10;
-                break;
-            case "15 Miles":
-                rangeAsNumber = 15;
-                break;
-            case "20 Miles":
-                rangeAsNumber = 20;
-                break;
-            default:
-                break;
-        }
-
-
-        if (schoolNameEdit.getText().toString().isEmpty()) {
-            return " WHERE range <= " + String.valueOf(rangeAsNumber);
-        } else {
-            return " AND range <= " + String.valueOf(rangeAsNumber);
-        }
-
-
-    }
-    private int appendRangeToQuery() {
-        int rangeAsNumber = 0;
-        if (rangeSpinner.getSelectedItem().toString().isEmpty()) {
-            return 0;
         }
 
         switch (rangeSpinner.getSelectedItem().toString()) {
@@ -209,28 +130,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
        }
 
-        return rangeAsNumber;
+        return String.valueOf(rangeAsNumber);
     }
 
-    private int ratingSearch() {
+    private String getRating() {
         int rating=0;
-//        switch (ratingSpinner.getSelectedItem()) {
-//            case ratingSpinner.getSelectedItem().equals(R.drawable.pixel): rating = 0;
-//                break;
-//            case R.drawable.one_star: rating = 1;
-//                break;
-//            case R.drawable.two_stars: rating = 2;
-//                break;
-//            case R.drawable.three_stars: rating = 3;
-//                break;
-//            case R.drawable.four_stars: rating = 4;
-//                break;
-//            case R.drawable.five_stars: rating = 5;
-//                break;
-//            default: rating = 0;
-//                break;
-//        }
-//        return rating;
         // TODO try getselecteditemposition
         if (ratingSpinner.getSelectedItem().equals(R.drawable.pixel)) rating = 0;
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.one_star)) rating = 1;
@@ -239,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.four_stars)) rating = 4;
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.five_stars)) rating = 5;
 
-        return rating;
-
+        return String.valueOf(rating);
     }
 }

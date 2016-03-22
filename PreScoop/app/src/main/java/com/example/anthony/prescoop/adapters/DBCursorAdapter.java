@@ -60,9 +60,4 @@ public class DBCursorAdapter extends android.widget.CursorAdapter {
                 return 0;
         }
     }
-
-    public void updateResults(Cursor cursor) {
-        cursor.notifyAll();
-    }
-
 }

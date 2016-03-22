@@ -46,11 +46,10 @@
                 android:layout_toEndOf="@+id/address_text_detail"
                 android:layout_above="@+id/rating_text_detail" />
 
-
             <ImageView
                 android:id="@+id/favorite_school_image_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
 
             <TextView
                 android:id="@+id/rating_text_detail"
