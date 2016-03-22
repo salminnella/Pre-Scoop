@@ -39,7 +39,7 @@ public class DBCursorAdapter extends android.widget.CursorAdapter {
             preschoolRating.setImageResource(getRatingImage(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_RATING))));
 
             if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 1) {
-                preschoolFavorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                preschoolFavorite.setImageResource(R.drawable.favorites);
             }
 
         }
@@ -60,4 +60,9 @@ public class DBCursorAdapter extends android.widget.CursorAdapter {
                 return 0;
         }
     }
+
+    public void updateResults(Cursor cursor) {
+        cursor.notifyAll();
+    }
+
 }

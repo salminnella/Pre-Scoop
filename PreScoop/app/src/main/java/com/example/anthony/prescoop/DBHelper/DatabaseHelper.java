@@ -202,10 +202,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * search criteria and passed to this search method.
      *
      */
-    public Cursor searchPreschools(String name, String range, String rating, String price) {
+    public Cursor searchPreschools(String name, String range, String price, String rating) {
+//        String nameSelection = "name LIKE ? COLLATE NOCASE ";
+//        String rangeSelection = "range <= ?";
+//        String priceSelection = "( price > 0 AND price <= ? )";
+//        String ratingSelection = "rating >= ? ";
+//        String[] args = new String[4];
+//        String where = "";
+//
+//        if (!name.isEmpty()) {
+//            where = nameSelection;
+//            args[0] = "%" + name + "%";
+//        } else if (!range.isEmpty() && !name.isEmpty()) {
+//            where = nameSelection + " AND " + rangeSelection;
+//            args[0] = "%" + name + "%";
+//            args[1] = range;
+//        }
 
-        String where = "name LIKE ? COLLATE NOCASE OR range <= ? OR price <= ? OR rating < ? ";
-        String[] args = { "%" + name + "%", range, price, rating };
+        String where = "name LIKE ? COLLATE NOCASE AND range <= ? AND ( price > 0 AND price <= ? ) OR rating >= ? ";
+        String[] args = { "%" + name + "%", range, price, rating};
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -260,7 +275,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor findPreschoolsByRating(String rating) {
 
-        String where = "rating <= ? ";
+        String where = "rating = ? ";
         String[] args = {rating};
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -275,6 +290,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String where = "price > 0 AND price <= ? ";
         String[] args = {price};
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor findByRangeRatingPrice(String range, String rating, String price) {
+        String where = "range <= ? AND rating = ? AND (price > 0 AND price <= ?) ";
+        String[] args = {range, rating, price};
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);

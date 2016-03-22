@@ -4,7 +4,7 @@
     <!-- marks the preschool as a Favorite -->
     <item
         android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:icon="@drawable/add_to_favorites"
         android:title="@string/action_favorite"
         app:showAsAction="ifRoom"/>
 </menu>

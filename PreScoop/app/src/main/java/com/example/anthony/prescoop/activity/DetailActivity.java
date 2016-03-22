@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +22,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView schoolDescription;
     ImageView schoolImage2;
 
-    TextView favorite;
+    ImageView favoriteSchool;
 
 
 
@@ -56,7 +55,9 @@ public class DetailActivity extends AppCompatActivity {
         // set the fields using the preschool object
         schoolAddress.setText(retrievedPreschool.getStreetAddress());
         schoolDescription.setText(retrievedPreschool.getSchoolDescription());
-        favorite.setText(String.valueOf(retrievedPreschool.isFavorite()));
+        if (retrievedPreschool.isFavorite() == 1) {
+            favoriteSchool.setImageResource(R.drawable.favorites);
+        }
         defaultSchoolImage.setImageResource(retrievedPreschool.getImages(0));
         schoolImage2.setImageResource(retrievedPreschool.getImages(1));
     }
@@ -68,7 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         schoolDescription = (TextView) findViewById(R.id.description_info_detail);
         schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
 
-        favorite = (TextView) findViewById(R.id.favorite_school_detail);
+        favoriteSchool = (ImageView) findViewById(R.id.favorite_school_image_detail);
 
     }
 
@@ -93,12 +94,12 @@ public class DetailActivity extends AppCompatActivity {
                 if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 0) {
                     helper.setFavoriteSchool(id);
                     cursor = helper.findPreschoolById(id);
-                    favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+                    favoriteSchool.setImageResource(R.drawable.favorites);
                 } else {
                     //remove favorite school
                     helper.removeFavoriteSchool(id);
                     cursor = helper.findPreschoolById(id);
-                    favorite.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)));
+                    favoriteSchool.setImageDrawable(null);
                 }
 
                 cursor.close();

@@ -66,14 +66,15 @@ public class ListActivity extends AppCompatActivity {
         }
         query = intentFromMain.getStringExtra(MainActivity.SEARCH_CRITERIA);
         String name = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
-        String range = String.valueOf(intentFromMain.getIntExtra(MainActivity.SEARCH_RANGE, ERROR_CODE));
+        String range = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
         String rating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
         String price = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
 
         //searchForSchools(query);
         //searchingForSchools(name, range, rating, price);
-
-        if (name != null) {
+        if (!range.equals("0") && !rating.equals("0") && !price.equals("")) {
+            searchByRangeRatingPrice(range, rating, price);
+        } else if (!name.equals("")) {
             searchByName(name);
         } else if (!range.equals("0")) {
             searchByRange(range);
@@ -122,6 +123,17 @@ public class ListActivity extends AppCompatActivity {
         }
     }
 
+    private void searchByRangeRatingPrice(String range, String rating, String price) {
+        cursor = searchHelper.findByRangeRatingPrice(range, rating, price);
+        //listview connects to the adapter
+        if (cursor != null) {
+            cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+            listView.setAdapter(cursorAdapter);
+        }
+    }
+
+
+
     private void searchForAllSchools() {
         cursor = searchHelper.getAllPreschools();
         //listview connects to the adapter
@@ -143,12 +155,12 @@ public class ListActivity extends AppCompatActivity {
         listView.setAdapter(cursorAdapter);
     }
 
-    private void searchingForSchools(String name, String range, String rating, String price) {
+    private void searchingForSchools(String name, String range, String price, String rating) {
         if (rating.equals("0")) {
             rating = "";
         }
 
-        cursor = searchHelper.searchPreschools(name, range, rating, price);
+        cursor = searchHelper.searchPreschools(name, range,  price, rating);
 
         //listview connects to the adapter
         cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
@@ -249,8 +261,10 @@ public class ListActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                searchForSchools(query);
-                //cursorAdapter.swapCursor(cursor);
+                //searchForSchools(query);
+                //cursorAdapter.notifyDataSetChanged();
+                //cursorAdapter.updateResults(cursor);
+
             }
         }
     }

@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String searchQuery = parseSearchCriteria();
                 String name = nameSearch();
-                int range = appendRangeToQuery();
+                String range = String.valueOf(appendRangeToQuery());
                 String rating = String.valueOf(ratingSearch());
 
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.close();
         } else {
-            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 0.0, "816 Diablo Rd", "Danville", "CA", "94526", "public", 5, "East Bay", 16, "925.837.1145", "2-5 years", R.drawable.acorn_main_photo, null, R.drawable.acorn_photo_two, null, 0, null, 0, null, 0, null, 0);
+            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 800.00, "816 Diablo Rd", "Danville", "CA", "94526", "public", 4, "East Bay", 16, "925.837.1145", "2-5 years", R.drawable.acorn_main_photo, null, R.drawable.acorn_photo_two, null, 0, null, 0, null, 0, null, 0);
             db.insertIntoPreschools("The Quarry Lane School", R.string.quarry_description, 1400.00, "3750 Boulder St.", "Pleasanton", "CA", "94568", "public", 3, "Easy Bay", 11, "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
             db.insertIntoPreschools("San Francisco Montessori Academy", R.string.sf_montesorri_description, 0.00, "1566 32nd Ave.", "San Francisco", "CA", "94122", "private", 5, "San Francisco", 6, "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
             db.insertIntoPreschools("Sunset Co-op Nursery School", R.string.sunset_co_op_description, 305.00, "4245 Lawton St.", "San Francisco", "CA", "94122", "co-op", 4, "San Francisco", 4, "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
@@ -125,15 +125,14 @@ public class MainActivity extends AppCompatActivity {
         addressEdit.getText().toString();
         ratingAsString = ratingSpinner.getSelectedItem().toString();
         budgetAsString = priceEdit.getText().toString();
+        ratingAsString =  String.valueOf(ratingSearch());
 
         if (!schoolNameAsString.isEmpty()) {
             query += "WHERE name LIKE \"%" + schoolNameAsString + "%\"";
         }
         else if (!rangeAsString.equals("Select A Range")) {
-            //query = appendRangeToQuery(query);
-        } else if (true) {  //need to split the address into the separate city sate zip etc.
-            // add the address items to the query
-        } else if (!ratingAsString.equals(R.drawable.pixel)) {
+            query += addRangeToQuery();
+        } else if (!ratingAsString.equals("0")) {
             query += ratingSpinner.getSelectedItem().toString();
         } else if (!budgetAsString.isEmpty()) {
             query += budgetAsString;
@@ -144,11 +143,46 @@ public class MainActivity extends AppCompatActivity {
 
     public String nameSearch() {
         if (schoolNameEdit.getText().toString().isEmpty()) {
-            return null;
+            return "";
         }
         return schoolNameEdit.getText().toString();
     }
 
+    private String addRangeToQuery() {
+        int rangeAsNumber = 0;
+        if (rangeSpinner.getSelectedItem().toString().isEmpty()) {
+            return "";
+        }
+
+        switch (rangeSpinner.getSelectedItem().toString()) {
+            case "1 Mile":
+                rangeAsNumber = 1;
+                break;
+            case "5 Miles":
+                rangeAsNumber = 5;
+                break;
+            case "10 Miles":
+                rangeAsNumber = 10;
+                break;
+            case "15 Miles":
+                rangeAsNumber = 15;
+                break;
+            case "20 Miles":
+                rangeAsNumber = 20;
+                break;
+            default:
+                break;
+        }
+
+
+        if (schoolNameEdit.getText().toString().isEmpty()) {
+            return " WHERE range <= " + String.valueOf(rangeAsNumber);
+        } else {
+            return " AND range <= " + String.valueOf(rangeAsNumber);
+        }
+
+
+    }
     private int appendRangeToQuery() {
         int rangeAsNumber = 0;
         if (rangeSpinner.getSelectedItem().toString().isEmpty()) {
@@ -197,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
 //                break;
 //        }
 //        return rating;
+        // TODO try getselecteditemposition
         if (ratingSpinner.getSelectedItem().equals(R.drawable.pixel)) rating = 0;
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.one_star)) rating = 1;
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.two_stars)) rating = 2;
@@ -205,5 +240,6 @@ public class MainActivity extends AppCompatActivity {
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.five_stars)) rating = 5;
 
         return rating;
+
     }
 }
