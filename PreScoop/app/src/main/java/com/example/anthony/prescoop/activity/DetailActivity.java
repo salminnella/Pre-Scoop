@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +24,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView schoolDescription;
     ImageView schoolImage2;
 
-    ImageView favoriteSchool;
+    ImageButton favoriteSchoolImageButton;
 
 
 
@@ -30,14 +32,14 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-//        ActionBar actionBar = getActionBar();
-//        actionBar.setDisplayShowTitleEnabled(false);
 
         receiveIntentExtras();
 
         initializeViews();
 
         populateSchoolDetails();
+
+        setOnItemClickListener();
 
     }
 
@@ -56,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         schoolAddress.setText(retrievedPreschool.getStreetAddress());
         schoolDescription.setText(retrievedPreschool.getSchoolDescription());
         if (retrievedPreschool.isFavorite() == 1) {
-            favoriteSchool.setImageResource(R.drawable.favorites);
+            favoriteSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
         }
         defaultSchoolImage.setImageResource(retrievedPreschool.getImages(0));
         schoolImage2.setImageResource(retrievedPreschool.getImages(1));
@@ -69,8 +71,31 @@ public class DetailActivity extends AppCompatActivity {
         schoolDescription = (TextView) findViewById(R.id.description_info_detail);
         schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
 
-        favoriteSchool = (ImageView) findViewById(R.id.favorite_school_image_detail);
+        favoriteSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
 
+    }
+
+    private void setOnItemClickListener() {
+        favoriteSchoolImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
+                Cursor cursor = helper.findPreschoolById(id);
+                cursor.moveToFirst();
+                if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 0) {
+                    helper.setFavoriteSchool(id);
+                    cursor = helper.findPreschoolById(id);
+                    favoriteSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
+                } else {
+                    //remove favorite school
+                    helper.removeFavoriteSchool(id);
+                    cursor = helper.findPreschoolById(id);
+                    favoriteSchoolImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                }
+
+                cursor.close();
+            }
+        });
     }
 
 
@@ -85,26 +110,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
-                Cursor cursor = helper.findPreschoolById(id);
-                cursor.moveToFirst();
-                if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 0) {
-                    helper.setFavoriteSchool(id);
-                    cursor = helper.findPreschoolById(id);
-                    favoriteSchool.setImageResource(R.drawable.favorites);
-                } else {
-                    //remove favorite school
-                    helper.removeFavoriteSchool(id);
-                    cursor = helper.findPreschoolById(id);
-                    favoriteSchool.setImageDrawable(null);
-                }
-
-                cursor.close();
-                break;
-
             case android.R.id.home:
                 // make sure the list is refreshed after user clicks back button
                 Intent backToList = getIntent();
@@ -119,7 +124,6 @@ public class DetailActivity extends AppCompatActivity {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
 
         return true;

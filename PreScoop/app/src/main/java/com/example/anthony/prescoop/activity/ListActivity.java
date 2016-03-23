@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
@@ -27,8 +26,6 @@ public class ListActivity extends AppCompatActivity {
     ListView listView;
     //holds the filter text within the actionbar
     String query;
-    // used as a kind of header when user wants to see just the favorites
-    TextView vewingFavsText;
     Boolean isViewingFavorites = false;
 
     // database items
@@ -61,7 +58,6 @@ public class ListActivity extends AppCompatActivity {
      */
     private void initializeViews() {
         listView = (ListView) findViewById(R.id.school_results_list);
-        vewingFavsText = (TextView) findViewById(R.id.favs_are_on_list_text);
     }
 
     /**
@@ -82,7 +78,6 @@ public class ListActivity extends AppCompatActivity {
         if (favs.equals("findFavs")) {
             cursor = searchHelper.findFavoritePreschools();
             isViewingFavorites = true;
-            vewingFavsText.setVisibility(TextView.VISIBLE);
             cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
             listView.setAdapter(cursorAdapter);
         } else {
@@ -159,7 +154,7 @@ public class ListActivity extends AppCompatActivity {
             listView.setAdapter(cursorAdapter);
         }
     }
-    
+
     /**
      * Takes the filter string from the action bar and passes it to handleIntent to perform a new
      * search from the database.
@@ -200,9 +195,6 @@ public class ListActivity extends AppCompatActivity {
                 Intent intent = new Intent(ListActivity.this, DetailActivity.class);
                 cursor.moveToPosition(position);
                 intent.putExtra(RECORD_ID, cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_ID)));
-                if (isViewingFavorites) {
-                    vewingFavsText.setVisibility(TextView.INVISIBLE);
-                }
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -212,8 +204,8 @@ public class ListActivity extends AppCompatActivity {
     /**
      * filling toolbar with menu options, and setting the actions for them
      *
-     * @param menu
-     * @return
+     * @param menu -- inflates the menuitems
+     * @return -- always returns true
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -229,6 +221,7 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.menu_list_find_favorites:
                 if (isViewingFavorites) {
@@ -240,15 +233,14 @@ public class ListActivity extends AppCompatActivity {
                         searchForAllSchools();
                     }
                     isViewingFavorites = false;
-                    vewingFavsText.setVisibility(TextView.INVISIBLE);
-
                     cursorAdapter.swapCursor(cursor);
+                    item.setIcon(R.drawable.ic_favorite_border_black_24dp);
                 } else {
                     // finds just the favorite schools
                     cursor = searchHelper.findFavoritePreschools();
                     isViewingFavorites = true;
-                    vewingFavsText.setVisibility(TextView.VISIBLE);
                     cursorAdapter.swapCursor(cursor);
+                    item.setIcon(R.drawable.ic_favorite_red_24dp);
                 }
         }
         return super.onOptionsItemSelected(item);
