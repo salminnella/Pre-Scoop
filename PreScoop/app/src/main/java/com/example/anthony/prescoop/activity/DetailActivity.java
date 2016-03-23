@@ -104,6 +104,7 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_activity, menu);
+
         return true;
     }
 

@@ -12,6 +12,7 @@ public class PreSchool {
     private String state;
     private String zipCode;
     private String region;
+    private int range;
     private String type;
     private String phoneNumber;
     private String ageGroup;
@@ -41,13 +42,16 @@ public class PreSchool {
         this.name = name;
     }
 
-    public PreSchool(String name, int schoolDescription, double price, String streetAddress, String city, String state, String zipCode, String phoneNumber, String region, String type, String ageGroup, int rating, int favorite, ArrayList<Integer> images) {
+    public PreSchool(String name, int schoolDescription, double price, String streetAddress, String city, String state,
+                     String zipCode, String phoneNumber, String region, int range, String type, String ageGroup, int rating,
+                     int favorite, ArrayList<Integer> images) {
         this.name = name;
         this.streetAddress = streetAddress;
         this.city = city;
         this.state = state;
         this.zipCode = zipCode;
         this.region = region;
+        this.range = range;
         this.type = type;
         this.phoneNumber = phoneNumber;
         this.ageGroup = ageGroup;
@@ -253,4 +257,14 @@ public class PreSchool {
     public void setPhoto5(int photo5) {
         this.photo5 = photo5;
     }
+
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+
 }

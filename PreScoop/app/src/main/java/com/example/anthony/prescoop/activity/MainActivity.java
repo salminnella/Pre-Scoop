@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String FAVS_KEY = "findFavs";
 
 
-    EditText addressEdit;
     EditText priceEdit;
     EditText schoolNameEdit;
     Spinner rangeSpinner;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        addressEdit = (EditText) findViewById(R.id.address_main_edit);
         priceEdit = (EditText) findViewById(R.id.price_main_edit);
         schoolNameEdit = (EditText) findViewById(R.id.school_name_main_edit);
         search = (Button) findViewById(R.id.search_button);
@@ -70,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
         // Create a custom adapter forrating drop down
         ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.pixel, R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
+
         //connect the two
         ratingSpinner.setAdapter(ratingAdapter);
 
