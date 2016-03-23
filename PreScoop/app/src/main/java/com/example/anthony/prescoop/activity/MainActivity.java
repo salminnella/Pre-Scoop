@@ -12,19 +12,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     public static final String SEARCH_CRITERIA = "searchCriteria";
     public static final String SEARCH_NAME = "searchName";
     public static final String SEARCH_RANGE = "searchRange";
     public static final String SEARCH_RATING = "searchRating";
     public static final String SEARCH_PRICE = "searchPrice";
     public static final String SEARCH_FAVS = "searchPrice";
+    public static final String FAVS_KEY = "findFavs";
 
 
     EditText addressEdit;
@@ -64,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
         //connect the two
         rangeSpinner.setAdapter(rangeAdapter);
 
-        // for the images on the rating drop down spinner
+        // for the images on the schoolrating drop down spinner
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
-        // Create a custom adapter for rating drop down
+        // Create a custom adapter forrating drop down
         ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.pixel, R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
         //connect the two
         ratingSpinner.setAdapter(ratingAdapter);
@@ -165,9 +167,16 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_main_find_favorites:
                 //go to list activity and find all favorites
-                Intent intentForFavs = new Intent(MainActivity.this, ListActivity.class);
-                intentForFavs.putExtra(SEARCH_FAVS, "findFavs");
-                startActivity(intentForFavs);
+                DatabaseHelper searchHelper = DatabaseHelper.getInstance(MainActivity.this);
+                Cursor cursor = searchHelper.findFavoritePreschools();
+                if (cursor.getCount() > 0) {
+                    Intent intentForFavs = new Intent(MainActivity.this, ListActivity.class);
+                    intentForFavs.putExtra(SEARCH_FAVS, FAVS_KEY);
+                    startActivity(intentForFavs);
+                } else {
+                    Toast.makeText(MainActivity.this, "No Favorites To View, Add One From The Details Page", Toast.LENGTH_LONG).show();
+                }
+
                 break;
 
         }

@@ -22,22 +22,21 @@ public class ListActivity extends AppCompatActivity {
     public static final String RECORD_ID = "id"; // passed to the details activity to find the preschool
     private static final int REQUEST_CODE = 42;  // used activityResult, to refresh list from details
 
-    //holds the results from the search criteria entered in Main
-    ListView listView;
-    //holds the filter text within the actionbar
-    String query;
-    Boolean isViewingFavorites = false;
 
+    ListView listView;  //holds the results from the search criteria entered in Main
+    String query;  //holds the filter text within the actionbar
+    Boolean isViewingFavorites = false; // which list set is the user looking at - search results or favs list
+    String favs;
     // database items
     DatabaseHelper searchHelper = DatabaseHelper.getInstance(ListActivity.this);
     DBCursorAdapter cursorAdapter;
     Cursor cursor;
 
     // variables used in the sql searches
-    String name;
-    String rating;
-    String range;
-    String price;
+    String schoolName;
+    String schoolRating;
+    String schoolRange;
+    String schoolPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +68,21 @@ public class ListActivity extends AppCompatActivity {
             return;
         }
 
-        name = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
-        range = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
-        rating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
-        price = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
-        String favs = intentFromMain.getStringExtra(MainActivity.SEARCH_FAVS);
+        schoolName = intentFromMain.getStringExtra(MainActivity.SEARCH_NAME);
+        schoolRange = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
+        schoolRating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
+        schoolPrice = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
+        favs = intentFromMain.getStringExtra(MainActivity.SEARCH_FAVS);
 
-        if (favs.equals("findFavs")) {
+        if (favs.equals(MainActivity.FAVS_KEY)) {
             cursor = searchHelper.findFavoritePreschools();
             isViewingFavorites = true;
             cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
             listView.setAdapter(cursorAdapter);
+            isViewingFavorites = true;
+
         } else {
-            performDatabaseSearch(name, range, rating, price);
+            performDatabaseSearch(schoolName, schoolRange, schoolRating, schoolPrice);
         }
     }
 
@@ -227,8 +228,8 @@ public class ListActivity extends AppCompatActivity {
                 if (isViewingFavorites) {
                     //returns the full list of schools
                     //searchForSchools(query);
-                    if (name != null) {
-                        performDatabaseSearch(name, range, rating, price);
+                    if (schoolName != null) {
+                        performDatabaseSearch(schoolName, schoolRange, schoolRating, schoolPrice);
                     } else {
                         searchForAllSchools();
                     }
@@ -246,12 +247,29 @@ public class ListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // http://hmkcode.com/android-menu-handling-click-events-changing-menu-items-at-runtime/
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (isViewingFavorites) {
+            menu.getItem(1).setIcon(R.drawable.ic_favorite_red_24dp);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // refresh the list for any new favs
-                performDatabaseSearch(name, range, rating, price);
+                if (isViewingFavorites) {
+                    cursor = searchHelper.findFavoritePreschools();
+                    isViewingFavorites = true;
+                    cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
+                    listView.setAdapter(cursorAdapter);
+
+                } else {
+                    performDatabaseSearch(schoolName, schoolRange, schoolRating, schoolPrice);
+                }
             }
         }
     }

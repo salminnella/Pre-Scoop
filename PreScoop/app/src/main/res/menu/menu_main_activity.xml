@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_main_find_favorites"
         android:title="@string/find_favs"
-        android:icon="@drawable/favorites"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
         app:showAsAction="ifRoom" />
 
 </menu>
