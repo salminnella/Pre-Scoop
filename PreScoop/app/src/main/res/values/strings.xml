@@ -18,6 +18,13 @@
     <string name="school_name_text">School Name</string>
     <string name="find_favs">Find Favs</string>
     <string name="filter_search">Filter List</string>
+    <string name="acorn_primary_photo">Acorn School Primary Photo</string>
+    <string name="fav_school">Favorite This School</string>
+    <string name="school_type">Type</string>
+    <string name="school_rating">School Rating</string>
+    <string name="school_region">Region</string>
+    <string name="school_age_group">Age Group</string>
+    <string name="school_additional_photo">schools additional photo 2</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->

@@ -12,7 +12,7 @@
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="windowActionBarOverlay">true</item>
     </style>
-    
+
     <style name="ActionBar" parent="AppTheme.Transparent">
         <item name="android:background">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
