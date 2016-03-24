@@ -63,7 +63,7 @@ public class DetailActivity extends AppCompatActivity {
         schoolDescriptionText.setText(retrievedPreschool.getSchoolDescription());
         schoolPriceText.setText("$" + String.valueOf(retrievedPreschool.getPrice()) + " /mo");
         // if its a favorite, the fav icon will be filled red. its just an outline image if not a favorite
-        if (retrievedPreschool.isFavorite() == 1) {
+        if (retrievedPreschool.getFavorite() == 1) {
             favSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
         }
         // the preschool object just holds a 1-5 int rating. the extractRating function
@@ -72,8 +72,8 @@ public class DetailActivity extends AppCompatActivity {
         schoolTypeText.setText(retrievedPreschool.getType());
         schoolRegionText.setText(retrievedPreschool.getRegion());
         schoolAgeGroupText.setText(retrievedPreschool.getAgeGroup());
-        schoolPrimaryImage.setImageResource(retrievedPreschool.getImages(0));
-        schoolImage2.setImageResource(retrievedPreschool.getImages(1));
+        schoolPrimaryImage.setImageResource(retrievedPreschool.getImageByPostion(0));
+        schoolImage2.setImageResource(retrievedPreschool.getImageByPostion(1));
     }
 
     private void initializeViews() {

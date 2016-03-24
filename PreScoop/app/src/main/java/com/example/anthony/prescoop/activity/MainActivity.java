@@ -17,6 +17,10 @@ import android.widget.Toast;
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
+import com.example.anthony.prescoop.models.PopulatePreschoolDB;
+import com.example.anthony.prescoop.models.PreSchool;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -28,28 +32,31 @@ public class MainActivity extends AppCompatActivity {
     public static final String SEARCH_FAVS = "searchPrice";
     public static final String FAVS_KEY = "findFavs";
 
-
-    EditText priceEdit;
-    EditText schoolNameEdit;
-    Spinner rangeSpinner;
-    ArrayAdapter<CharSequence> rangeAdapter;
-    Spinner ratingSpinner;
-    SpinAdapter ratingAdapter;
-    Button search;
+    //region private variables
+    private EditText priceEdit;
+    private EditText schoolNameEdit;
+    private Spinner rangeSpinner;
+    private ArrayAdapter<CharSequence> rangeAdapter;
+    private Spinner ratingSpinner;
+    private SpinAdapter ratingAdapter;
+    private Button search;
+    DatabaseHelper db;
+    // endregion private variables
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeViews();
-        setOnClickListeners();
+        db = DatabaseHelper.getInstance(MainActivity.this);
+        initViews();
+        initClickListeners();
 
         fillTempPreschool();
 
     }
 
-    private void initializeViews() {
+    private void initViews() {
         priceEdit = (EditText) findViewById(R.id.price_main_edit);
         schoolNameEdit = (EditText) findViewById(R.id.school_name_main_edit);
         search = (Button) findViewById(R.id.search_button);
@@ -75,37 +82,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setOnClickListeners() {
+    private void initClickListeners() {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //Search searchData = new Search(schoolNameEdit.getText().toString(), getRange(), getRating(), priceEdit.getText().toString());
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                //intent.putExtra("searchObject", searchData);
                 intent.putExtra(SEARCH_NAME, schoolNameEdit.getText().toString());
                 intent.putExtra(SEARCH_RANGE, getRange());
                 intent.putExtra(SEARCH_RATING, getRating());
                 intent.putExtra(SEARCH_PRICE, priceEdit.getText().toString());
-                startActivity(intent);
+               startActivity(intent);
             }
         });
     }
 
     private void fillTempPreschool() {
-        DatabaseHelper db = new DatabaseHelper(this);
+        //DatabaseHelper db = new DatabaseHelper(this);
         // do a get on preschools
         Cursor cursor = db.getAllPreschools();
         cursor.moveToFirst();
 
+
         // if the cursor result is empty, insert the schools below
         // if the cursor isn't empty skip the insert
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
             cursor.close();
         } else {
-            db.insertIntoPreschools("Acorn Learning Center", R.string.acorn_description, 800.00, "816 Diablo Rd", "Danville", "CA", "94526", "public", 4, "East Bay", 16, "925.837.1145", "2-5 years", R.drawable.acorn_main_photo, null, R.drawable.acorn_photo_two, null, 0, null, 0, null, 0, null, 0);
-            db.insertIntoPreschools("The Quarry Lane School", R.string.quarry_description, 1400.00, "3750 Boulder St.", "Pleasanton", "CA", "94568", "public", 3, "Easy Bay", 11, "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
-            db.insertIntoPreschools("San Francisco Montessori Academy", R.string.sf_montesorri_description, 0.00, "1566 32nd Ave.", "San Francisco", "CA", "94122", "private", 5, "San Francisco", 6, "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
-            db.insertIntoPreschools("Sunset Co-op Nursery School", R.string.sunset_co_op_description, 305.00, "4245 Lawton St.", "San Francisco", "CA", "94122", "co-op", 4, "San Francisco", 4, "Phone Number", "Age Group", 0, null, 0, null, 0, null, 0, null, 0, null, 0);
 
+            ArrayList<PreSchool> preschools = PopulatePreschoolDB.getPreSchoolItems(MainActivity.this);
+            for (PreSchool school : preschools) {
+                db.insertIntoPreschools(school.getName(), school.getSchoolDescription(), school.getPrice(),
+                        school.getStreetAddress(), school.getCity(), school.getState(), school.getZipCode(),
+                        school.getType(), school.getRating(), school.getRegion(), school.getRange(),
+                        school.getPhoneNumber(), school.getAgeGroup(), school.getFavorite(), school.getImages(), school.getImageDescription());
+            }
             cursor.close();
         }
       }

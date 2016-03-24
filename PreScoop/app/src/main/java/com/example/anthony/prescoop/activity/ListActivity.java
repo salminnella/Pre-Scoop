@@ -72,6 +72,7 @@ public class ListActivity extends AppCompatActivity {
         schoolRange = intentFromMain.getStringExtra(MainActivity.SEARCH_RANGE);
         schoolRating = intentFromMain.getStringExtra(MainActivity.SEARCH_RATING);
         schoolPrice = intentFromMain.getStringExtra(MainActivity.SEARCH_PRICE);
+        //Search searchCriteria = intentFromMain.getParcelableExtra("searchObject");
         favs = intentFromMain.getStringExtra(MainActivity.SEARCH_FAVS);
 
         if (favs.equals(MainActivity.FAVS_KEY)) {

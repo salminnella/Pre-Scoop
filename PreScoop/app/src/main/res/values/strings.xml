@@ -25,6 +25,9 @@
     <string name="school_region">Region</string>
     <string name="school_age_group">Age Group</string>
     <string name="school_additional_photo">schools additional photo 2</string>
+    <string name="acorn_name">Acorn Learning Center</string>
+    <string name="montessori_name">San Francisco Montessori Academy</string>
+    <string name="acorn_image1_description">acorn Image Desc. 1</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->

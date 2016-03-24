@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.anthony.prescoop.models.PreSchool;
 
-import java.util.ArrayList;
-
 /**
  * Created by anthony on 3/15/16.
  */
@@ -120,7 +118,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * This is used in the main activity, to populate the database with some preschools.
      * We've been using static db's in the class exercises and labs, but wanted a way to have it
      * start with some schools in the database.
-     *
      * @param name
      * @param schoolDescription
      * @param price
@@ -130,22 +127,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param zip
      * @param type
      * @param rating
-     * @param photo1
-     * @param photo1Description
-     * @param photo2
-     * @param photo2Description
-     * @param photo3
-     * @param photo3Description
-     * @param photo4
-     * @param photo4Description
-     * @param photo5
-     * @param photo5Description
+     * @param region
+     * @param range
+     * @param phoneNumber
+     * @param age
+     * @param favorite
+     * @param schoolImages
+     * @param imageDescription
      */
     public void insertIntoPreschools(String name, int schoolDescription, double price, String address, String city,
                                      String state, String zip, String type, int rating, String region, int range,
-                                     String phoneNumber, String age, int photo1, String photo1Description, int photo2,
-                                     String photo2Description, int photo3, String photo3Description, int photo4,
-                                     String photo4Description, int photo5, String photo5Description, int favorite) {
+                                     String phoneNumber, String age, int favorite, int[] schoolImages, String[] imageDescription) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -162,16 +154,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_RANGE, range);
         values.put(COL_PHONE_NUMBER, phoneNumber);
         values.put(COL_AGE_GROUP, age);
-        values.put(COL_PHOTO_1, photo1);
-        values.put(COL_PHOTO_1_DESCRIPTION, photo1Description);
-        values.put(COL_PHOTO_2, photo2);
-        values.put(COL_PHOTO_2_DESCRIPTION, photo2Description);
-        values.put(COL_PHOTO_3, photo3);
-        values.put(COL_PHOTO_3_DESCRIPTION, photo3Description);
-        values.put(COL_PHOTO_4, photo4);
-        values.put(COL_PHOTO_4_DESCRIPTION, photo4Description);
-        values.put(COL_PHOTO_5, photo5);
-        values.put(COL_PHOTO_5_DESCRIPTION, photo5Description);
+
+        values.put(COL_PHOTO_1, schoolImages[0]);
+        values.put(COL_PHOTO_1_DESCRIPTION, imageDescription[0]);
+        values.put(COL_PHOTO_2, schoolImages[1]);
+        values.put(COL_PHOTO_2_DESCRIPTION, imageDescription[1]);
+        values.put(COL_PHOTO_3, schoolImages[2]);
+        values.put(COL_PHOTO_3_DESCRIPTION, imageDescription[2]);
+        values.put(COL_PHOTO_4, schoolImages[3]);
+        values.put(COL_PHOTO_4_DESCRIPTION, imageDescription[3]);
+        values.put(COL_PHOTO_5, schoolImages[4]);
+        values.put(COL_PHOTO_5_DESCRIPTION, imageDescription[4]);
         values.put(COL_FAVORITE, favorite);
 
         db.insert(PRESCHOOL_TABLE_NAME, null, values);
@@ -332,14 +325,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String phoneNum = cursor.getString(cursor.getColumnIndex(COL_PHONE_NUMBER));
         String ageGroup = cursor.getString(cursor.getColumnIndex(COL_AGE_GROUP));
 
-        ArrayList<Integer> schoolImages = new ArrayList<>();
-        schoolImages.add(cursor.getInt(cursor.getColumnIndex(COL_PHOTO_1)));
-        schoolImages.add(cursor.getInt(cursor.getColumnIndex(COL_PHOTO_2)));
+        int[] schoolImages = new int[5];
+        schoolImages[0] = cursor.getInt(cursor.getColumnIndex(COL_PHOTO_1));
+        schoolImages[1] = cursor.getInt(cursor.getColumnIndex(COL_PHOTO_2));
 
         cursor.close();
 
         return new PreSchool(name, description, price, schoolAddress, city, state, zip, phoneNum, region, range,
-                type, ageGroup, rating, favorite, schoolImages);
+                type, ageGroup, rating, favorite, schoolImages, null);
 
     }
 

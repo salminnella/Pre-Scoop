@@ -49,7 +49,7 @@
         android:layout_below="@id/school_name_main_edit"
         android:layout_alignLeft="@+id/school_name_main_text"
         android:layout_alignStart="@+id/school_name_main_text"/>
-    
+
     <Spinner
         android:id="@+id/range_spinner_main"
         android:layout_width="match_parent"

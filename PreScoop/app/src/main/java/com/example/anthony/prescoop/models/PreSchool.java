@@ -1,7 +1,5 @@
 package com.example.anthony.prescoop.models;
 
-import java.util.ArrayList;
-
 /**
  * Created by anthony on 3/12/16.
  */
@@ -12,27 +10,19 @@ public class PreSchool {
     private String state;
     private String zipCode;
     private String region;
-    private int range;
     private String type;
     private String phoneNumber;
     private String ageGroup;
-    private String photo1Description;
-    private String photo2Description;
-    private String photo3Description;
-    private String photo4Description;
-    private String photo5Description;
 
+    private int range;
     private int schoolDescription;
-    private int photo1;
-    private int photo2;
-    private int photo3;
-    private int photo4;
-    private int photo5;
     private int rating;
-
-    private ArrayList<Integer> images;
-    private double price;
     private int favorite;
+    private double price;
+
+    private int[] images;
+    private String[] imageDescription;
+
 
     public PreSchool() {
 
@@ -44,7 +34,7 @@ public class PreSchool {
 
     public PreSchool(String name, int schoolDescription, double price, String streetAddress, String city, String state,
                      String zipCode, String phoneNumber, String region, int range, String type, String ageGroup, int rating,
-                     int favorite, ArrayList<Integer> images) {
+                     int favorite, int[] images, String[] imageDescription) {
         this.name = name;
         this.streetAddress = streetAddress;
         this.city = city;
@@ -57,9 +47,10 @@ public class PreSchool {
         this.ageGroup = ageGroup;
         this.schoolDescription = schoolDescription;
         this.rating = rating;
-        this.images = images;
         this.price = price;
         this.favorite = favorite;
+        this.images = images;
+        this.imageDescription = imageDescription;
     }
 
     public String getName() {
@@ -134,26 +125,6 @@ public class PreSchool {
         this.phoneNumber = phoneNumber;
     }
 
-    public Integer getImages(int position) {
-        return images.get(position);
-    }
-
-    public void setImages(ArrayList<Integer> images) {
-        this.images = images;
-    }
-
-    public int isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(int favorite) {
-        this.favorite = favorite;
-    }
-
-    public void addImage(int image) {
-        this.images.add(image);
-    }
-
     public String getCity() {
         return city;
     }
@@ -178,86 +149,6 @@ public class PreSchool {
         this.zipCode = zipCode;
     }
 
-    public String getPhoto1Description() {
-        return photo1Description;
-    }
-
-    public void setPhoto1Description(String photo1Description) {
-        this.photo1Description = photo1Description;
-    }
-
-    public String getPhoto2Description() {
-        return photo2Description;
-    }
-
-    public void setPhoto2Description(String photo2Description) {
-        this.photo2Description = photo2Description;
-    }
-
-    public String getPhoto3Description() {
-        return photo3Description;
-    }
-
-    public void setPhoto3Description(String photo3Description) {
-        this.photo3Description = photo3Description;
-    }
-
-    public String getPhoto4Description() {
-        return photo4Description;
-    }
-
-    public void setPhoto4Description(String photo4Description) {
-        this.photo4Description = photo4Description;
-    }
-
-    public String getPhoto5Description() {
-        return photo5Description;
-    }
-
-    public void setPhoto5Description(String photo5Description) {
-        this.photo5Description = photo5Description;
-    }
-
-    public int getPhoto1() {
-        return photo1;
-    }
-
-    public void setPhoto1(int photo1) {
-        this.photo1 = photo1;
-    }
-
-    public int getPhoto2() {
-        return photo2;
-    }
-
-    public void setPhoto2(int photo2) {
-        this.photo2 = photo2;
-    }
-
-    public int getPhoto3() {
-        return photo3;
-    }
-
-    public void setPhoto3(int photo3) {
-        this.photo3 = photo3;
-    }
-
-    public int getPhoto4() {
-        return photo4;
-    }
-
-    public void setPhoto4(int photo4) {
-        this.photo4 = photo4;
-    }
-
-    public int getPhoto5() {
-        return photo5;
-    }
-
-    public void setPhoto5(int photo5) {
-        this.photo5 = photo5;
-    }
-
     public int getRange() {
         return range;
     }
@@ -266,5 +157,35 @@ public class PreSchool {
         this.range = range;
     }
 
+    public int getImageByPostion(int position) {
+        return images[position];
+    }
 
+    public void setImages(int[] images) {
+        this.images = images;
+    }
+
+    public String getImageDescriptionByPostion(int position) {
+        return imageDescription[position];
+    }
+
+    public int[] getImages() {
+        return images;
+    }
+
+    public String[] getImageDescription() {
+        return imageDescription;
+    }
+
+    public void setImageDescription(String[] imageDescription) {
+        this.imageDescription = imageDescription;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
 }
