@@ -23,7 +23,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView schoolPriceText;
     TextView schoolTypeText;
     TextView schoolRegionText;
-    TextView schoolAgeGroup;
+    TextView schoolAgeGroupText;
     ImageView schoolPrimaryImage;
     ImageView schoolRatingImage;
     ImageView schoolImage2;
@@ -62,29 +62,34 @@ public class DetailActivity extends AppCompatActivity {
         schoolAddressText.setText(retrievedPreschool.getStreetAddress() + " " + retrievedPreschool.getCity() + " " + retrievedPreschool.getState() + ", " + retrievedPreschool.getZipCode());
         schoolDescriptionText.setText(retrievedPreschool.getSchoolDescription());
         schoolPriceText.setText("$" + String.valueOf(retrievedPreschool.getPrice()) + " /mo");
+        // if its a favorite, the fav icon will be filled red. its just an outline image if not a favorite
         if (retrievedPreschool.isFavorite() == 1) {
             favSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
         }
+        // the preschool object just holds a 1-5 int rating. the extractRating function
+        // puts in the right image for that number
         schoolRatingImage.setImageResource(extractRating(retrievedPreschool.getRating()));
         schoolTypeText.setText(retrievedPreschool.getType());
         schoolRegionText.setText(retrievedPreschool.getRegion());
-        schoolAgeGroup.setText(retrievedPreschool.getAgeGroup());
+        schoolAgeGroupText.setText(retrievedPreschool.getAgeGroup());
         schoolPrimaryImage.setImageResource(retrievedPreschool.getImages(0));
         schoolImage2.setImageResource(retrievedPreschool.getImages(1));
     }
 
     private void initializeViews() {
-        schoolPrimaryImage = (ImageView) findViewById(R.id.default_school_image_detail);
         schoolAddressText = (TextView) findViewById(R.id.address_info_detail);
-        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
         schoolDescriptionText = (TextView) findViewById(R.id.description_info_detail);
-        schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
         schoolPriceText = (TextView) findViewById(R.id.price_info_detail);
-        favSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
-        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
         schoolTypeText = (TextView) findViewById(R.id.type_info_detail);
         schoolRegionText = (TextView) findViewById(R.id.region_info_detail);
-        schoolAgeGroup = (TextView) findViewById(R.id.age_group_info_detail);
+        schoolAgeGroupText = (TextView) findViewById(R.id.age_group_info_detail);
+
+        schoolPrimaryImage = (ImageView) findViewById(R.id.default_school_image_detail);
+        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
+        schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
+        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
+
+        favSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
 
     }
 
@@ -120,14 +125,17 @@ public class DetailActivity extends AppCompatActivity {
                 DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
                 Cursor cursor = helper.findPreschoolById(id);
                 cursor.moveToFirst();
+                // sets the favorite column in the db to 1 --> adds it as a favorite
                 if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 0) {
                     helper.setFavoriteSchool(id);
                     cursor = helper.findPreschoolById(id);
+                    // fills in the fav icon to red
                     favSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
                 } else {
-                    //remove favorite school
+                    // sets the favorite column in the db to 0 --> removes favorite school
                     helper.removeFavoriteSchool(id);
                     cursor = helper.findPreschoolById(id);
+                    // sets the favorite icon back to just the outline
                     favSchoolImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 }
 
@@ -160,8 +168,6 @@ public class DetailActivity extends AppCompatActivity {
                 break;
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
 
