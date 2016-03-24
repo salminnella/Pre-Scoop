@@ -23,6 +23,7 @@ public class DetailActivity extends AppCompatActivity {
     ImageView schoolRating;
     TextView schoolDescription;
     ImageView schoolImage2;
+    TextView schoolPrice;
 
     ImageButton favoriteSchoolImageButton;
 
@@ -32,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         receiveIntentExtras();
 
@@ -57,6 +59,7 @@ public class DetailActivity extends AppCompatActivity {
         // set the fields using the preschool object
         schoolAddress.setText(retrievedPreschool.getStreetAddress());
         schoolDescription.setText(retrievedPreschool.getSchoolDescription());
+        //schoolPrice.setText(retrievedPreschool.getPrice());
         if (retrievedPreschool.isFavorite() == 1) {
             favoriteSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
         }
@@ -70,7 +73,7 @@ public class DetailActivity extends AppCompatActivity {
         schoolRating = (ImageView) findViewById(R.id.rating_image_detail);
         schoolDescription = (TextView) findViewById(R.id.description_info_detail);
         schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
-
+        schoolPrice = (TextView) findViewById(R.id.price_text_details);
         favoriteSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
 
     }

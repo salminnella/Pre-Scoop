@@ -29,7 +29,7 @@ public class DBCursorAdapter extends android.widget.CursorAdapter {
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             view.setBackgroundResource(android.R.color.white);
-            view.setBackgroundResource(R.drawable.rounded_corners);
+            view.setBackgroundResource(R.drawable.rounded_transparent);
             TextView preschoolName = (TextView) view.findViewById(R.id.name_text_list_items);
             TextView preschoolAddress = (TextView) view.findViewById(R.id.address_text_list_items);
             ImageView preschoolRating = (ImageView) view.findViewById(R.id.rating_image_list_items);

@@ -1,0 +1,18 @@
+
+Main activity test cases
+the user can enter into the school name field to be used in the search
+the user can select a value from the range spinner to be used in the search
+the user can select a value from the rating spinner to be used in the search
+the user can enter an integer value for the monthly budget to be used in the search
+the user can click the favorite icon in the menu to see all current favorites
+the user can perform the search with search criteria or none at all to view schools
+
+
+List activity test cases
+the user can filter the list set by school name that is searched in the database
+the user can view favorites, by searching for them in the database
+the user can click an item to go to the details
+
+
+Detail activity test cases
+the user can select the school as a favorite
