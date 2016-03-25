@@ -27,9 +27,13 @@ public class DetailActivity extends AppCompatActivity {
     private TextView schoolTypeText;
     private TextView schoolRegionText;
     private TextView schoolAgeGroupText;
+    private TextView schoolImage2Descrption;
+    private TextView schoolImage3Descrption;
     private ImageView schoolPrimaryImage;
+
     private ImageView schoolRatingImage;
     private ImageView schoolImage2;
+    private ImageView schoolImage3;
     private ImageButton favSchoolImageButton;
 
     private DatabaseHelper searchHelper;
@@ -63,6 +67,32 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
+     * initializes all the views in the layout
+     */
+    private void initializeViews() {
+        // TextView
+        schoolAddressText = (TextView) findViewById(R.id.address_info_detail);
+        schoolDescriptionText = (TextView) findViewById(R.id.description_info_detail);
+        schoolPriceText = (TextView) findViewById(R.id.price_info_detail);
+        schoolTypeText = (TextView) findViewById(R.id.type_info_detail);
+        schoolRegionText = (TextView) findViewById(R.id.region_info_detail);
+        schoolAgeGroupText = (TextView) findViewById(R.id.age_group_info_detail);
+        schoolImage2Descrption = (TextView) findViewById(R.id.school_photo2_description_detail);
+        schoolImage3Descrption = (TextView) findViewById(R.id.school_photo3_description_detail);
+
+        // ImageView
+        schoolPrimaryImage = (ImageView) findViewById(R.id.default_school_image_detail);
+        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
+        schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
+        schoolImage3 = (ImageView) findViewById(R.id.school_photo3_detail);
+        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
+
+        // ImageButton
+        favSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
+
+    }
+
+    /**
      * Finds the Preschool using the id received from the intent.
      * Fills in all the Preschool item details.
      */
@@ -78,6 +108,10 @@ public class DetailActivity extends AppCompatActivity {
         schoolTypeText.setText(retrievedPreschool.getType());
         schoolRegionText.setText(retrievedPreschool.getRegion());
         schoolAgeGroupText.setText(retrievedPreschool.getAgeGroup());
+        if (retrievedPreschool.getImageDescription() != null) {
+            schoolImage2Descrption.setText(retrievedPreschool.getImageDescription()[1]);
+            schoolImage3Descrption.setText(retrievedPreschool.getImageDescription()[2]);
+        }
 
         // if its a favorite, the fav icon will be filled red. its just an outline image if not a favorite
         if (retrievedPreschool.getFavorite() == 1) {
@@ -86,33 +120,11 @@ public class DetailActivity extends AppCompatActivity {
         // all the images for the school
         schoolPrimaryImage.setImageResource(retrievedPreschool.getImageByPostion(0));
         schoolImage2.setImageResource(retrievedPreschool.getImageByPostion(1));
+        schoolImage3.setImageResource(retrievedPreschool.getImageByPostion(2));
 
         // the rating for the school is just holds a 1-5 integer. the extractRating function
         // puts in the right image for that number.
         schoolRatingImage.setImageResource(extractRating(retrievedPreschool.getRating()));
-    }
-
-    /**
-     * initializes all the views in the layout
-     */
-    private void initializeViews() {
-        // TextView
-        schoolAddressText = (TextView) findViewById(R.id.address_info_detail);
-        schoolDescriptionText = (TextView) findViewById(R.id.description_info_detail);
-        schoolPriceText = (TextView) findViewById(R.id.price_info_detail);
-        schoolTypeText = (TextView) findViewById(R.id.type_info_detail);
-        schoolRegionText = (TextView) findViewById(R.id.region_info_detail);
-        schoolAgeGroupText = (TextView) findViewById(R.id.age_group_info_detail);
-
-        // ImageView
-        schoolPrimaryImage = (ImageView) findViewById(R.id.default_school_image_detail);
-        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
-        schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
-        schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
-
-        // ImageButton
-        favSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
-
     }
 
     /**

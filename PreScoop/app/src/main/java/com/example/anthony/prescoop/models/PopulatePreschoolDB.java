@@ -29,6 +29,9 @@ public class PopulatePreschoolDB {
 
     private static int[] urbanitesImages = new int[5];
     private static String[] urbanitesImageDescription = new String[5];
+
+    private static int[] imagineImages = new int[5];
+    private static String[] imagineImageDescription = new String[5];
     // endregion private variables
 
     /**
@@ -56,21 +59,23 @@ public class PopulatePreschoolDB {
         PreSchool sunset = new PreSchool();
         // urbanites school
         PreSchool urbanites = new PreSchool();
+        // imagine school
+        PreSchool imagine = new PreSchool();
 
         // setting acorn values
         acorn.setName(context.getString(R.string.acorn_name));
         acorn.setSchoolDescription(R.string.acorn_description);
         acorn.setPrice(800);
-        acorn.setStreetAddress("816 Diablo Rd");
-        acorn.setCity("Danville");
-        acorn.setState("CA");
-        acorn.setZipCode("94526");
-        acorn.setType("public");
+        acorn.setStreetAddress(context.getString(R.string.acorn_street_address));
+        acorn.setCity(context.getString(R.string.acorn_city));
+        acorn.setState(context.getString(R.string.school_state));
+        acorn.setZipCode(context.getString(R.string.acorn_zipcode));
+        acorn.setType(context.getString(R.string.public_type));
         acorn.setRating(4);
-        acorn.setRegion("East Bay");
+        acorn.setRegion(context.getString(R.string.acorn_region));
         acorn.setRange(16);
-        acorn.setPhoneNumber("925.837.1145");
-        acorn.setAgeGroup("2-5 Years");
+        acorn.setPhoneNumber(context.getString(R.string.acorn_phoneNum));
+        acorn.setAgeGroup(context.getString(R.string.acorn_ageGroup));
         // array for the images for acorn school
         acornImages[0] = R.drawable.acorn_main_photo;
         acornImages[1] = R.drawable.acorn_photo_two;
@@ -82,25 +87,26 @@ public class PopulatePreschoolDB {
 
 
         // setting quarry lane school values
-        quarryLane.setName("The Quarry Lane School");
+        quarryLane.setName(context.getString(R.string.quarry_name));
         quarryLane.setSchoolDescription(R.string.quarry_description);
         quarryLane.setPrice(1400);
-        quarryLane.setStreetAddress("3750 Boulder St.");
-        quarryLane.setCity("Pleasanton");
-        quarryLane.setState("CA");
-        quarryLane.setZipCode("94568");
-        quarryLane.setType("public");
+        quarryLane.setStreetAddress(context.getString(R.string.quarry_street_address));
+        quarryLane.setCity(context.getString(R.string.quarry_city));
+        quarryLane.setState(context.getString(R.string.school_state));
+        quarryLane.setZipCode(context.getString(R.string.quarry_zipcode));
+        quarryLane.setType(context.getString(R.string.public_type));
         quarryLane.setRating(3);
-        quarryLane.setRegion("East Bay");
+        quarryLane.setRegion(context.getString(R.string.quarry_region));
         quarryLane.setRange(11);
-        quarryLane.setPhoneNumber("(925) 462-6300");
-        quarryLane.setAgeGroup("1-5 years");
-        // array for the images for acorn school
+        quarryLane.setPhoneNumber(context.getString(R.string.quarry_phoneNum));
+        quarryLane.setAgeGroup(context.getString(R.string.quarry_ageGroup));
+        // array for the images for quarry school
         quarryLaneImages[0] = R.drawable.quarry_campus;
         quarryLaneImages[1] = R.drawable.quarry_campus_2;
         quarryLaneImages[2] = R.drawable.quarry_class;
         quarryLaneImages[3] = R.drawable.quaryy_computer_lab;
         quarryLane.setImages(quarryLaneImages);
+        // array for the image descriptions for quarry school
         quarryImageDescriptions[0] = context.getString(R.string.defualt_image_description);
         quarryImageDescriptions[1] = context.getString(R.string.defualt_image_description);
         quarryImageDescriptions[2] = context.getString(R.string.defualt_image_description);
@@ -112,65 +118,90 @@ public class PopulatePreschoolDB {
         montessori.setName(context.getString(R.string.montessori_name));
         montessori.setSchoolDescription(R.string.sf_montesorri_description);
         montessori.setPrice(2700);
-        montessori.setStreetAddress("1566 32nd Ave.");
-        montessori.setCity("San Francisco");
-        montessori.setState("CA");
-        montessori.setZipCode("94122");
-        montessori.setType("private");
+        montessori.setStreetAddress(context.getString(R.string.montessori_street_address));
+        montessori.setCity(context.getString(R.string.montessori_city));
+        montessori.setState(context.getString(R.string.school_state));
+        montessori.setZipCode(context.getString(R.string.montessori_zipcode));
+        montessori.setType(context.getString(R.string.private_type));
         montessori.setRating(5);
-        montessori.setRegion("San Francisco");
+        montessori.setRegion(context.getString(R.string.montessori_region));
         montessori.setRange(6);
-        montessori.setPhoneNumber("(415) 504-6467");
-        montessori.setAgeGroup("3-5 years");
+        montessori.setPhoneNumber(context.getString(R.string.montessori_phone));
+        montessori.setAgeGroup(context.getString(R.string.montessori_ageGroup));
+        // array for the images for montessori school
         montessoriImages[0] = R.drawable.montessori;
         montessori.setImages(montessoriImages);
-        //TODO set new montesorri images
+        // array for the image description for montessori school
         montessoriImageDescriptions[0] = context.getString(R.string.defualt_image_description);
-        montessoriImageDescriptions[1] = context.getString(R.string.defualt_image_description);
         montessori.setImageDescription(montessoriImageDescriptions);
 
 
         // settings sunset co-op school values
-        sunset.setName("Sunset Co-op Nursery School");
+        sunset.setName(context.getString(R.string.sunset_name));
         sunset.setSchoolDescription(R.string.sunset_co_op_description);
         sunset.setPrice(305);
-        sunset.setStreetAddress("4245 Lawton St.");
-        sunset.setCity("San Francisco");
-        sunset.setState("CA");
-        sunset.setZipCode("94122");
-        sunset.setType("co-op");
+        sunset.setStreetAddress(context.getString(R.string.sunset_street_address));
+        sunset.setCity(context.getString(R.string.sunset_city));
+        sunset.setState(context.getString(R.string.school_state));
+        sunset.setZipCode(context.getString(R.string.sunset_zipcode));
+        sunset.setType(context.getString(R.string.co_op_type));
         sunset.setRating(4);
-        sunset.setRegion("San Francisco");
+        sunset.setRegion(context.getString(R.string.sunset_region));
         sunset.setRange(4);
-        sunset.setPhoneNumber("415.759.5710");
-        sunset.setAgeGroup("2-5");
+        sunset.setPhoneNumber(context.getString(R.string.sunset_phoneNum));
+        sunset.setAgeGroup(context.getString(R.string.sunset_ageGroup));
+        // array for the images for sunset school
         sunsetImages[0] = R.drawable.sunset;
         sunset.setImages(sunsetImages);
+        // array for the image description for sunset school
         sunsetImageDescriptions[0] = context.getString(R.string.defualt_image_description);
         sunset.setImageDescription(sunsetImageDescriptions);
 
         // setting urbanites values
-        urbanites.setName("Little Urbanites Preschool");
+        urbanites.setName(context.getString(R.string.urbanites_name));
         urbanites.setSchoolDescription(R.string.urbanites_description);
         urbanites.setPrice(800);
-        urbanites.setStreetAddress("1258 20th Avenue");
-        urbanites.setCity("San Francisco");
-        urbanites.setState("CA");
-        urbanites.setZipCode("94122");
-        urbanites.setType("public");
+        urbanites.setStreetAddress(context.getString(R.string.urbanites_street_address));
+        urbanites.setCity(context.getString(R.string.urbanites_city));
+        urbanites.setState(context.getString(R.string.urbanites_state));
+        urbanites.setZipCode(context.getString(R.string.urbanites_zipcode));
+        urbanites.setType(context.getString(R.string.public_type));
         urbanites.setRating(3);
-        urbanites.setRegion("East Bay");
+        urbanites.setRegion(context.getString(R.string.urbanites_region));
         urbanites.setRange(1);
-        urbanites.setPhoneNumber("925.837.1145");
-        urbanites.setAgeGroup("2-5 Years");
-        // array for the images for acorn school
+        urbanites.setPhoneNumber(context.getString(R.string.urbanites_phoneNum));
+        urbanites.setAgeGroup(context.getString(R.string.urbanites_ageGroup));
+        // array for the images for urbanites school
         urbanitesImages[0] = R.drawable.urbanites2;
         urbanitesImages[1] = R.drawable.urbanites_reading;
         urbanites.setImages(urbanitesImages);
-        // array for the image descriptions for acorn school
+        // array for the image descriptions for urbanites school
         urbanitesImageDescription[0] = context.getString(R.string.defualt_image_description);
         urbanitesImageDescription[1] = context.getString(R.string.defualt_image_description);
         urbanites.setImageDescription(urbanitesImageDescription);
+
+        // setting imagine values
+        imagine.setName(context.getString(R.string.imagine_name));
+        imagine.setSchoolDescription(R.string.imagine_description);
+        imagine.setPrice(1208);
+        imagine.setStreetAddress(context.getString(R.string.imagine_street_address));
+        imagine.setCity(context.getString(R.string.imagine_city));
+        imagine.setState(context.getString(R.string.imagine_state));
+        imagine.setZipCode(context.getString(R.string.imagine_zipcode));
+        imagine.setType(context.getString(R.string.public_type));
+        imagine.setRating(2);
+        imagine.setRegion(context.getString(R.string.imagine_region));
+        imagine.setRange(4);
+        imagine.setPhoneNumber(context.getString(R.string.imagine_phoneNum));
+        imagine.setAgeGroup(context.getString(R.string.imagine_ageGroup));
+        // array for the images for imagine school
+        imagineImages[0] = R.drawable.imagine;
+        imagineImages[1] = R.drawable.imagine2;
+        imagine.setImages(imagineImages);
+        // array for the image descriptions for imagine school
+        imagineImageDescription[0] = context.getString(R.string.defualt_image_description);
+        imagineImageDescription[1] = context.getString(R.string.defualt_image_description);
+        imagine.setImageDescription(imagineImageDescription);
 
         // adding school objects to a list
         ArrayList<PreSchool> allPreSchools = new ArrayList<>();
@@ -179,6 +210,7 @@ public class PopulatePreschoolDB {
         allPreSchools.add(montessori);
         allPreSchools.add(sunset);
         allPreSchools.add(urbanites);
+        allPreSchools.add(imagine);
 
         return allPreSchools;
     }

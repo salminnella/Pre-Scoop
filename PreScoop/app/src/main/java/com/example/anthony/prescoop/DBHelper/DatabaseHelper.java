@@ -255,7 +255,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String args[] = {searchData.getSearchPrice()};
             cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
 
-        // searching for ALL preschool
+        // searching for ALL preschools
         } else {
             cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
         }
