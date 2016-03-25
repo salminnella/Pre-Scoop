@@ -64,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             COL_NAME + " TEXT, " +
             COL_DESCRIPTION + " TEXT, " +
-            COL_MONTHLY_PRICE + " DOUBLE, " +
+            COL_MONTHLY_PRICE + " INT, " +
             COL_STREET_ADDRESS + " TEXT, " +
             COL_CITY + " TEXT, " +
             COL_STATE + " TEXT, " +
@@ -122,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param name String
      * @param schoolDescription Int to a R.string address
-     * @param price Double
+     * @param price Int
      * @param address String
      * @param city String
      * @param state String
@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param schoolImages int[]
      * @param imageDescription String[]
      */
-    public void insertIntoPreschools(String name, int schoolDescription, double price, String address, String city,
+    public void insertIntoPreschools(String name, int schoolDescription, int price, String address, String city,
                                      String state, String zip, String type, int rating, String region, int range,
                                      String phoneNumber, String age, int favorite, int[] schoolImages, String[] imageDescription) {
         //SQLiteDatabase db = getWritableDatabase();
@@ -194,76 +194,81 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return cursor
      */
     public Cursor prepareSearchQuery(SearchDataForDB searchData) {
-        String where;
-        // searching Range, Rating, and Price
-        if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")) && (!searchData.getSearchPrice().equals("")))) {
-           where = COL_RANGE + " <= ? AND " + COL_RATING + "= ? AND ("+ COL_MONTHLY_PRICE + " > 0 AND "+ COL_MONTHLY_PRICE + " <= ?) ";
-            String[] args = {searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-        // searching Range and Rating
-        } else if ( (!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0"))) ) {
-            where = COL_RANGE + " <= ? AND " + COL_RATING + " = ? ";
-            String[] args = {searchData.getSearchRange(), searchData.getSearchRating()};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-        // searching Range and Price
-        } else if ( (!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchPrice().equals(""))) ) {
-            where = COL_RANGE + " <= ? AND ("+ COL_MONTHLY_PRICE + " > 0 AND "+ COL_MONTHLY_PRICE + " <= ?) ";
-            String[] args = {searchData.getSearchRange(), searchData.getSearchPrice()};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-
-        // searching Rating and Price
-        } else if ( (!searchData.getSearchRating().equals("0")) && ((!searchData.getSearchPrice().equals(""))) ) {
-            where = COL_RATING + " = ? AND ("+ COL_MONTHLY_PRICE + " > 0 AND "+ COL_MONTHLY_PRICE + " <= ?) ";
-            String[] args = {searchData.getSearchRating(), searchData.getSearchPrice()};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-
-        // searching Name
-        } else if (!searchData.getSearchSchoolName().equals("")) {
-            where = COL_NAME + " LIKE ? COLLATE NOCASE ";
-            String[] args = {"%" + searchData.getSearchSchoolName() + "%"};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-
-        // searching Range
-        } else if (!searchData.getSearchRange().equals("0")) {
-            where = COL_RANGE + " <= ? ";
-            String[] args = {searchData.getSearchRange()};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-
-        // searching Rating
-        } else if (!searchData.getSearchRating().equals("0")) {
-            where = COL_RATING + " = ? ";
-            String[] args = {searchData.getSearchRating()};
-            cursor = searchDatabase(where, args);
-
-            return cursor;
-
-        // searching Price
-        } else if (!searchData.getSearchPrice().equals("")) {
-            where = "(" + COL_MONTHLY_PRICE + " > 0 AND " + COL_MONTHLY_PRICE + " <= ?) ";
-            String args[] = {searchData.getSearchPrice()};
-            cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
-
-        // searching for ALL preschools
-        } else {
+        if (searchData == null) {
             cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
-        }
+        } else {
+            String where;
+            // searching Range, Rating, and Price
+            if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")) && (!searchData.getSearchPrice().equals("")))) {
+                where = COL_RANGE + " <= ? AND " + COL_RATING + "= ? AND (" + COL_MONTHLY_PRICE + " > 0 AND " + COL_MONTHLY_PRICE + " <= ?) ";
+                String[] args = {searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()};
+                cursor = searchDatabase(where, args);
 
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-        }
+                return cursor;
+                // searching Range and Rating
+            } else if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")))) {
+                where = COL_RANGE + " <= ? AND " + COL_RATING + " = ? ";
+                String[] args = {searchData.getSearchRange(), searchData.getSearchRating()};
+                cursor = searchDatabase(where, args);
 
+                return cursor;
+                // searching Range and Price
+            } else if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchPrice().equals("")))) {
+                where = COL_RANGE + " <= ? AND (" + COL_MONTHLY_PRICE + " > 0 AND " + COL_MONTHLY_PRICE + " <= ?) ";
+                String[] args = {searchData.getSearchRange(), searchData.getSearchPrice()};
+                cursor = searchDatabase(where, args);
+
+                return cursor;
+
+                // searching Rating and Price
+            } else if ((!searchData.getSearchRating().equals("0")) && ((!searchData.getSearchPrice().equals("")))) {
+                where = COL_RATING + " = ? AND (" + COL_MONTHLY_PRICE + " > 0 AND " + COL_MONTHLY_PRICE + " <= ?) ";
+                String[] args = {searchData.getSearchRating(), searchData.getSearchPrice()};
+                cursor = searchDatabase(where, args);
+
+                return cursor;
+
+                // searching Name
+            } else if (!searchData.getSearchSchoolName().equals("")) {
+                where = COL_NAME + " LIKE ? COLLATE NOCASE ";
+                String[] args = {"%" + searchData.getSearchSchoolName() + "%"};
+                cursor = searchDatabase(where, args);
+
+                return cursor;
+
+                // searching Range
+            } else if (!searchData.getSearchRange().equals("0")) {
+                where = COL_RANGE + " <= ? ";
+                String[] args = {searchData.getSearchRange()};
+                cursor = searchDatabase(where, args);
+
+                return cursor;
+
+                // searching Rating
+            } else if (!searchData.getSearchRating().equals("0")) {
+                where = COL_RATING + " = ? ";
+                String[] args = {searchData.getSearchRating()};
+                cursor = searchDatabase(where, args);
+
+                return cursor;
+
+                // searching Price
+            } else if (!searchData.getSearchPrice().equals("")) {
+                where = "(" + COL_MONTHLY_PRICE + " > 0 AND " + COL_MONTHLY_PRICE + " <= ?) ";
+                String args[] = {searchData.getSearchPrice()};
+                cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+
+                // searching for ALL preschools
+            } else {
+                cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
+            }
+
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+            }
+
+            return cursor;
+        }
         return cursor;
     }
 
@@ -324,7 +329,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int rating = cursor.getInt(cursor.getColumnIndex(COL_RATING));
         int range = cursor.getInt(cursor.getColumnIndex(COL_RANGE));
         int favorite = cursor.getInt(cursor.getColumnIndex(COL_FAVORITE));
-        double price = cursor.getDouble(cursor.getColumnIndex(COL_MONTHLY_PRICE));
+        int price = cursor.getInt(cursor.getColumnIndex(COL_MONTHLY_PRICE));
         String name = cursor.getString(cursor.getColumnIndex(COL_NAME));
         String schoolAddress = cursor.getString(cursor.getColumnIndex(COL_STREET_ADDRESS));
         String city = cursor.getString(cursor.getColumnIndex(COL_CITY));

@@ -107,7 +107,9 @@ public class ListActivity extends AppCompatActivity {
         if (isViewingFavorites) {
             cursor = searchHelper.findFavoritePreschools();
         } else {
-           cursor = searchHelper.prepareSearchQuery(searchData);
+            if (searchData != null) {
+                cursor = searchHelper.prepareSearchQuery(searchData);
+            }
         }
 
         if (cursor.getCount() > 0) {

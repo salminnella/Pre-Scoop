@@ -18,7 +18,7 @@ public class PreSchool {
     private int schoolDescription;
     private int rating;
     private int favorite;
-    private double price;
+    private int price;
 
     private int[] images;
     private String[] imageDescription;
@@ -32,7 +32,7 @@ public class PreSchool {
         this.name = name;
     }
 
-    public PreSchool(String name, int schoolDescription, double price, String streetAddress, String city, String state,
+    public PreSchool(String name, int schoolDescription, int price, String streetAddress, String city, String state,
                      String zipCode, String phoneNumber, String region, int range, String type, String ageGroup, int rating,
                      int favorite, int[] images, String[] imageDescription) {
         this.name = name;
@@ -69,11 +69,11 @@ public class PreSchool {
         this.streetAddress = streetAddress;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

@@ -189,7 +189,7 @@ public class PopulatePreschoolDB {
         imagine.setState(context.getString(R.string.imagine_state));
         imagine.setZipCode(context.getString(R.string.imagine_zipcode));
         imagine.setType(context.getString(R.string.public_type));
-        imagine.setRating(2);
+        imagine.setRating(1);
         imagine.setRegion(context.getString(R.string.imagine_region));
         imagine.setRange(4);
         imagine.setPhoneNumber(context.getString(R.string.imagine_phoneNum));
