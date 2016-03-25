@@ -29,7 +29,6 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
     // region Constants
-    private static final String TAG = "MainActivity";
     public static final String FIND_FAVORITE_PRESCHOOLS = "findFavs";
     public static final Boolean FAVORITES_VALUE = true;
     // endregion Constants
@@ -38,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText priceEdit;
     private EditText schoolNameEdit;
     private Spinner rangeSpinner;
-    private ArrayAdapter<CharSequence> rangeAdapter;
     private Spinner ratingSpinner;
-    private SpinAdapter ratingAdapter;
     private Button search;
     DatabaseHelper searchHelper;
     Cursor cursor;
@@ -71,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         // for the range spinner, to select a minimum distance for schools (within 5 miles etc.)
         rangeSpinner = (Spinner) findViewById(R.id.range_spinner_main);
-        rangeAdapter = ArrayAdapter.createFromResource(this, R.array.range_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> rangeAdapter = ArrayAdapter.createFromResource(this, R.array.range_array, android.R.layout.simple_spinner_item);
         rangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rangeSpinner.setAdapter(rangeAdapter);
 
         // for the rating spinner, filled with images to select a minimum rating ( 1 star, 2 stars etc.)
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
-        ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.pixel, R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
+        SpinAdapter ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.pixel, R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
         ratingSpinner.setAdapter(ratingAdapter);
     }
 
@@ -166,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private String getRating() {
         int rating=0;
-        // TODO try getselecteditemposition
         if (ratingSpinner.getSelectedItem().equals(R.drawable.pixel)) rating = 0;
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.one_star)) rating = 1;
         else if (ratingSpinner.getSelectedItem().equals(R.drawable.two_stars)) rating = 2;
@@ -180,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * fills the action bar, only has a Favorite icon
      * @param menu Menu type variable
-     * @return
+     * @return Boolean
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -205,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
                 //go to list activity and find all favorites
                 cursor = searchHelper.findFavoritePreschools();
                 if (cursor.getCount() > 0) {
-                    Intent intentForFavs = new Intent(MainActivity.this, ListActivity.class);
-                    intentForFavs.putExtra(FIND_FAVORITE_PRESCHOOLS, FAVORITES_VALUE);
-                    startActivity(intentForFavs);
+                    Intent intentForFavorites = new Intent(MainActivity.this, ListActivity.class);
+                    intentForFavorites.putExtra(FIND_FAVORITE_PRESCHOOLS, FAVORITES_VALUE);
+                    startActivity(intentForFavorites);
                 } else {
-                    Toast.makeText(MainActivity.this, "No Favorites To View, Add One From The Details Page", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT).show();
                 }
 
                 break;

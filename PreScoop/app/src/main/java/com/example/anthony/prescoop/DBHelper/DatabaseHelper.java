@@ -11,7 +11,10 @@ import com.example.anthony.prescoop.models.PreSchool;
 import com.example.anthony.prescoop.models.SearchDataForDB;
 
 /**
- * Created by anthony on 3/15/16.
+ *  The database Builder, and search helper. Creates The Prescoop Database
+ *  and preschools table, and all its columns.
+ *
+ *  Also performs the search queries and returns either a cursor or PreSchool object
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 3;
@@ -185,35 +188,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor searchDB(SearchDataForDB searchData) {
+    /**
+     * Receives the search criteria in a SearchDataForDB object, and decides which query statement to run
+     *
+     * @param searchData SearchDataForDB object
+     * @return cursor
+     */
+    public Cursor prepareSearchQuery(SearchDataForDB searchData) {
         String where;
 
         if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")) && (searchData.getSearchPrice().equals("")))) {
             Log.i("Database Helper", "search data: range =: " + searchData.getSearchRange() + " rating: " + searchData.getSearchRating() + " price: " + searchData.getSearchPrice());
             where = "range <= ? AND rating = ? AND (price > 0 AND price <= ?) ";
             String[] args = {searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()};
-            cursor = doSearch(where, args);
+            cursor = searchDatabase(where, args);
 
             return cursor;
 
         } else if (!searchData.getSearchSchoolName().equals("")) {
             where = "name LIKE ? COLLATE NOCASE ";
             String[] args = {"%" + searchData.getSearchSchoolName() + "%"};
-            cursor = doSearch(where, args);
+            cursor = searchDatabase(where, args);
 
             return cursor;
 
         } else if (!searchData.getSearchRange().equals("0")) {
             where = "range <= ? ";
             String[] args = {searchData.getSearchRange()};
-            cursor = doSearch(where, args);
+            cursor = searchDatabase(where, args);
 
             return cursor;
 
         } else if (!searchData.getSearchRating().equals("0")) {
             where = "rating = ? ";
             String[] args = {searchData.getSearchRating()};
-            cursor = doSearch(where, args);
+            cursor = searchDatabase(where, args);
 
             return cursor;
 
@@ -233,7 +242,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor doSearch(String where, String[] args) {
+    /**
+     * does the actual search in the database. Receives the Where, and Arguments
+     * selections from the prepareSearchQuery method.
+     *
+     * Returns a Descending sorted cursor on the rating. Highest rating on top of the list
+     *
+     * @param where String
+     * @param args String Array
+     * @return Cursor
+     */
+    public Cursor searchDatabase(String where, String[] args) {
 
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
@@ -242,6 +261,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    /**
+     * receives a string query from the ListActivity, that the user entered in the actionbar
+     *
+     * @param query String
+     * @return Cursor
+     */
     public Cursor filterPreschoolList(String query) {
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME,
                 COLUMNS,
@@ -249,7 +274,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{"%" + query + "%"},
                 null,
                 null,
-                null,
+                COL_RATING + " DESC", 
                 null);
         cursor.moveToFirst();
         return cursor;
@@ -296,6 +321,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Sets the school as a favorite, from the DetailActivity.  Will change the favorite column from a 0 to a 1
+     *
+     * @param id int
+     */
     public void setFavoriteSchool(int id) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_FAVORITE, 1);
@@ -303,6 +333,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         dbWrite.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Removes the school as a favorite, from the DetailActivity.  Will change the favorite column from a 1 to a 0
+     * @param id int
+     */
     public void removeFavoriteSchool(int id) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_FAVORITE, 0);
@@ -310,6 +344,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         dbWrite.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Finds all schools with a 1 in the favorite column
+     * @return Cursor
+     */
     public Cursor findFavoritePreschools() {
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME,
                 COLUMNS,

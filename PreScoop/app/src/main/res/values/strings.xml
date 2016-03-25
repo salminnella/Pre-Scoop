@@ -28,6 +28,7 @@
     <string name="acorn_image1_description">acorn Image Desc. 1</string>
     <string name="defualt_image_description">This Photo Should Have A Description</string>
     <string name="urbanites_description">We offer a full day program for children ages 2.5-5yrs. We’re open daily 8:30-5:30. Tuition includes nutritious daily snacks and lunch made with wholesome organic ingredients whenever possible. We offer a staff to student ratio of 1:5.</string>
+    <string name="no_favorites">No Favorites To View, Add One From The Details Page</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->

@@ -35,7 +35,6 @@ public class ListActivity extends AppCompatActivity {
 
     // region private variables
     private ListView listView;  //holds the results from the search criteria entered in Main
-    private String query;  //holds the filter string from within the actionbar
     private Boolean isViewingFavorites = false; // which list set is the user looking at - search results or favorites
 
     // database items
@@ -108,7 +107,7 @@ public class ListActivity extends AppCompatActivity {
         if (isViewingFavorites) {
             cursor = searchHelper.findFavoritePreschools();
         } else {
-           cursor = searchHelper.searchDB(searchData);
+           cursor = searchHelper.prepareSearchQuery(searchData);
         }
 
         if (cursor.getCount() > 0) {
@@ -133,7 +132,7 @@ public class ListActivity extends AppCompatActivity {
      */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            query = intent.getStringExtra(SearchManager.QUERY);
+            String query = intent.getStringExtra(SearchManager.QUERY);
             cursor = searchHelper.filterPreschoolList(query);
             listView = (ListView) findViewById(R.id.school_results_list);
 
@@ -168,8 +167,8 @@ public class ListActivity extends AppCompatActivity {
      * menu options for search filter, and view favorites.
      * Favorites icon will toggle between finding favorites,
      * and user chosen search criteria
-     * @param item
-     * @return
+     * @param item MenuItem
+     * @return Boolean
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -178,7 +177,7 @@ public class ListActivity extends AppCompatActivity {
             case R.id.menu_list_find_favorites:
                 if (isViewingFavorites) {
                     if (searchData != null) {
-                        cursor = searchHelper.searchDB(searchData);
+                        cursor = searchHelper.prepareSearchQuery(searchData);
                     } else {
                         cursor = searchHelper.getAllPreschools();
                     }
@@ -190,7 +189,7 @@ public class ListActivity extends AppCompatActivity {
                     // finds just the favorite schools
                     cursor = searchHelper.findFavoritePreschools();
                     if (cursor.getCount() == 0) {
-                        Toast.makeText(ListActivity.this, "No Favorites To View, Add One From The Details Page", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ListActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT).show();
                     }
                     isViewingFavorites = true;
                     cursorAdapter.changeCursor(cursor);
@@ -236,7 +235,7 @@ public class ListActivity extends AppCompatActivity {
                     listView.setAdapter(cursorAdapter);
 
                 } else {
-                    cursor = searchHelper.searchDB(searchData);
+                    cursor = searchHelper.prepareSearchQuery(searchData);
                     cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
                     listView.setAdapter(cursorAdapter);
                 }
