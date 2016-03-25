@@ -113,6 +113,8 @@ public class ListActivity extends AppCompatActivity {
         if (cursor.getCount() > 0) {
             cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
             listView.setAdapter(cursorAdapter);
+        } else {
+            Toast.makeText(ListActivity.this, "No Results Found, Please Try Again", Toast.LENGTH_SHORT).show();
         }
     }
 

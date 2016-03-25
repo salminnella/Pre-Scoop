@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.example.anthony.prescoop.models.PreSchool;
 import com.example.anthony.prescoop.models.SearchDataForDB;
@@ -196,41 +195,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public Cursor prepareSearchQuery(SearchDataForDB searchData) {
         String where;
-
-        if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")) && (searchData.getSearchPrice().equals("")))) {
-            Log.i("Database Helper", "search data: range =: " + searchData.getSearchRange() + " rating: " + searchData.getSearchRating() + " price: " + searchData.getSearchPrice());
-            where = "range <= ? AND rating = ? AND (price > 0 AND price <= ?) ";
+        // searching Range, Rating, and Price
+        if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")) && (!searchData.getSearchPrice().equals("")))) {
+           where = COL_RANGE + " <= ? AND " + COL_RATING + "= ? AND ("+ COL_MONTHLY_PRICE + " > 0 AND "+ COL_MONTHLY_PRICE + " <= ?) ";
             String[] args = {searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()};
             cursor = searchDatabase(where, args);
 
             return cursor;
+        // searching Range and Rating
+        } else if ( (!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0"))) ) {
+            where = COL_RANGE + " <= ? AND " + COL_RATING + " = ? ";
+            String[] args = {searchData.getSearchRange(), searchData.getSearchRating()};
+            cursor = searchDatabase(where, args);
 
+            return cursor;
+        // searching Range and Price
+        } else if ( (!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchPrice().equals(""))) ) {
+            where = COL_RANGE + " <= ? AND ("+ COL_MONTHLY_PRICE + " > 0 AND "+ COL_MONTHLY_PRICE + " <= ?) ";
+            String[] args = {searchData.getSearchRange(), searchData.getSearchPrice()};
+            cursor = searchDatabase(where, args);
+
+            return cursor;
+
+        // searching Rating and Price
+        } else if ( (!searchData.getSearchRating().equals("0")) && ((!searchData.getSearchPrice().equals(""))) ) {
+            where = COL_RATING + " = ? AND ("+ COL_MONTHLY_PRICE + " > 0 AND "+ COL_MONTHLY_PRICE + " <= ?) ";
+            String[] args = {searchData.getSearchRating(), searchData.getSearchPrice()};
+            cursor = searchDatabase(where, args);
+
+            return cursor;
+
+        // searching Name
         } else if (!searchData.getSearchSchoolName().equals("")) {
-            where = "name LIKE ? COLLATE NOCASE ";
+            where = COL_NAME + " LIKE ? COLLATE NOCASE ";
             String[] args = {"%" + searchData.getSearchSchoolName() + "%"};
             cursor = searchDatabase(where, args);
 
             return cursor;
 
+        // searching Range
         } else if (!searchData.getSearchRange().equals("0")) {
-            where = "range <= ? ";
+            where = COL_RANGE + " <= ? ";
             String[] args = {searchData.getSearchRange()};
             cursor = searchDatabase(where, args);
 
             return cursor;
 
+        // searching Rating
         } else if (!searchData.getSearchRating().equals("0")) {
-            where = "rating = ? ";
+            where = COL_RATING + " = ? ";
             String[] args = {searchData.getSearchRating()};
             cursor = searchDatabase(where, args);
 
             return cursor;
 
+        // searching Price
         } else if (!searchData.getSearchPrice().equals("")) {
-            where = "(price > 0 AND price <= ?) ";
+            where = "(" + COL_MONTHLY_PRICE + " > 0 AND " + COL_MONTHLY_PRICE + " <= ?) ";
             String args[] = {searchData.getSearchPrice()};
             cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
 
+        // searching for ALL preschool
         } else {
             cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
         }
@@ -274,7 +299,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{"%" + query + "%"},
                 null,
                 null,
-                COL_RATING + " DESC", 
+                COL_RATING + " DESC",
                 null);
         cursor.moveToFirst();
         return cursor;
