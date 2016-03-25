@@ -186,95 +186,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor searchDB(SearchDataForDB searchData) {
-        String where = "name LIKE ? COLLATE NOCASE ";
-        String[] args = {"%" + searchData.getSearchCriteria()[0] + "%"};
+        String where;
 
-        Log.i("db", "school name is; " + searchData.getSearchCriteria()[0]);
-        Log.i("db", "args; " + args[0]);
-        //AND range <= ? AND rating = ? AND price <= ?
-        //, searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()
+        if ((!searchData.getSearchRange().equals("0")) && ((!searchData.getSearchRating().equals("0")) && (searchData.getSearchPrice().equals("")))) {
+            Log.i("Database Helper", "search data: range =: " + searchData.getSearchRange() + " rating: " + searchData.getSearchRating() + " price: " + searchData.getSearchPrice());
+            where = "range <= ? AND rating = ? AND (price > 0 AND price <= ?) ";
+            String[] args = {searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()};
+            cursor = doSearch(where, args);
 
-        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
-        if (cursor != null) {
+            return cursor;
+
+        } else if (!searchData.getSearchSchoolName().equals("")) {
+            where = "name LIKE ? COLLATE NOCASE ";
+            String[] args = {"%" + searchData.getSearchSchoolName() + "%"};
+            cursor = doSearch(where, args);
+
+            return cursor;
+
+        } else if (!searchData.getSearchRange().equals("0")) {
+            where = "range <= ? ";
+            String[] args = {searchData.getSearchRange()};
+            cursor = doSearch(where, args);
+
+            return cursor;
+
+        } else if (!searchData.getSearchRating().equals("0")) {
+            where = "rating = ? ";
+            String[] args = {searchData.getSearchRating()};
+            cursor = doSearch(where, args);
+
+            return cursor;
+
+        } else if (!searchData.getSearchPrice().equals("")) {
+            where = "(price > 0 AND price <= ?) ";
+            String args[] = {searchData.getSearchPrice()};
+            cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+
+        } else {
+            cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
+        }
+
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
         }
+
         return cursor;
     }
 
-    /**
-     * Searches the database in just the School Name column
-     * @param name String
-     * @return Cursor
-     */
-    public Cursor findPreschoolsByName(String name) {
-        String where = "name LIKE ? COLLATE NOCASE ";
-        String[] args = {"%" + name + "%"};
-
-        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
-    }
-
-    /**
-     * Searches the database in just the School Range column
-     * @param range String
-     * @return Cursor
-     */
-    public Cursor findPreschoolsByRange(String range) {
-        String where = "range <= ? ";
-        String[] args = {range};
-
-        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
-    }
-
-    /**
-     * Searches the database in just the School Rating column
-     * @param rating String
-     * @return Cursor
-     */
-    public Cursor findPreschoolsByRating(String rating) {
-        String where = "rating = ? ";
-        String[] args = {rating};
-
-        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
-    }
-
-    /**
-     * Searches the database in just the School Price column
-     * @param price
-     * @return
-     */
-    public Cursor findPreschoolsByPrice(String price) {
-        String where = "price > 0 AND price <= ? ";
-        String[] args = {price};
-
-        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
-    }
-
-    /**
-     * Searches the database in the Range, Rating, and Price columns
-     * @param range
-     * @param rating
-     * @param price
-     * @return
-     */
-    public Cursor findByRangeRatingPrice(String range, String rating, String price) {
-        String where = "range <= ? AND rating = ? AND (price > 0 AND price <= ?) ";
-        String[] args = {range, rating, price};
+    public Cursor doSearch(String where, String[] args) {
 
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {

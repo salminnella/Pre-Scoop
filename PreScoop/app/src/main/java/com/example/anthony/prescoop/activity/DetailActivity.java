@@ -1,7 +1,6 @@
 package com.example.anthony.prescoop.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -34,7 +33,6 @@ public class DetailActivity extends AppCompatActivity {
     private ImageButton favSchoolImageButton;
 
     private DatabaseHelper searchHelper;
-    private Cursor cursor;
     // endregion private variables
 
     @Override
@@ -69,7 +67,7 @@ public class DetailActivity extends AppCompatActivity {
      * Fills in all the Preschool item details.
      */
     private void populateSchoolDetails() {
-        // get a preschool object using a cursor from the database
+        // get a preschool object from the database
         PreSchool retrievedPreschool = searchHelper.retrievePreschool(id);
         String formattedAddress = retrievedPreschool.getStreetAddress() + " " + retrievedPreschool.getCity() + " " + retrievedPreschool.getState() + ", " + retrievedPreschool.getZipCode();
         String formattedPrice = "$" + String.valueOf(retrievedPreschool.getPrice()) + " /mo";

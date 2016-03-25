@@ -19,6 +19,7 @@ import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
 import com.example.anthony.prescoop.models.PopulatePreschoolDB;
 import com.example.anthony.prescoop.models.PreSchool;
+import com.example.anthony.prescoop.models.SearchDataForDB;
 
 import java.util.ArrayList;
 
@@ -27,13 +28,11 @@ import java.util.ArrayList;
  * that will be used in finding preschools from the database
  */
 public class MainActivity extends AppCompatActivity {
+    // region Constants
     private static final String TAG = "MainActivity";
-    public static final String SEARCH_PRESCHOOL_NAME = "searchName";
-    public static final String SEARCH_PRESCHOOL_RANGE = "searchRange";
-    public static final String SEARCH_PRESCHOOL_RATING = "searchRating";
-    public static final String SEARCH_PRESCHOOL_PRICE = "searchPrice";
     public static final String FIND_FAVORITE_PRESCHOOLS = "findFavs";
     public static final Boolean FAVORITES_VALUE = true;
+    // endregion Constants
 
     //region private variables
     private EditText priceEdit;
@@ -92,14 +91,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //SearchDataForDB searchData = new SearchDataForDB(schoolNameEdit.getText().toString(), getRange(), getRating(), priceEdit.getText().toString());
+                SearchDataForDB searchData = new SearchDataForDB(schoolNameEdit.getText().toString(), getRange(), getRating(), priceEdit.getText().toString());
                 Intent intentToListResults = new Intent(MainActivity.this, ListActivity.class);
-                //intentToListResults.putExtra("searchObject", searchData);
-                intentToListResults.putExtra(SEARCH_PRESCHOOL_NAME, schoolNameEdit.getText().toString());
-                intentToListResults.putExtra(SEARCH_PRESCHOOL_RANGE, getRange());
-                intentToListResults.putExtra(SEARCH_PRESCHOOL_RATING, getRating());
-                intentToListResults.putExtra(SEARCH_PRESCHOOL_PRICE, priceEdit.getText().toString());
-                //Log.i("MainAct", "searchdata is:" + searchData.getSearchCriteria()[0]);
+                intentToListResults.putExtra("searchObject", searchData);
                startActivity(intentToListResults);
             }
         });
