@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">PreScoop</string>
     <string name="string_range_main">Range</string>
-    <string name="string_address_main">Address / Crossroads</string>
     <string name="string_rating_main">Rating</string>
     <string name="budget_string">Monthly Budget</string>
     <string name="preshool_search">Search for PreSchools</string>]
@@ -13,7 +12,6 @@
     <string name="address_label_detail">Address</string>
     <string name="rating_label_detail">Rating</string>
     <string name="description_label_detail">Description</string>
-    <string name="action_favorite">Favorite This Preschool</string>
     <string name="search_hint">Filter list by....</string>
     <string name="school_name_text">School Name</string>
     <string name="find_favs">Find Favs</string>
@@ -28,6 +26,8 @@
     <string name="acorn_name">Acorn Learning Center</string>
     <string name="montessori_name">San Francisco Montessori Academy</string>
     <string name="acorn_image1_description">acorn Image Desc. 1</string>
+    <string name="defualt_image_description">This Photo Should Have A Description</string>
+    <string name="urbanites_description">We offer a full day program for children ages 2.5-5yrs. We’re open daily 8:30-5:30. Tuition includes nutritious daily snacks and lunch made with wholesome organic ingredients whenever possible. We offer a staff to student ratio of 1:5.</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->

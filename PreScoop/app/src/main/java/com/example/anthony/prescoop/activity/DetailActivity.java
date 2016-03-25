@@ -16,20 +16,26 @@ import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.models.PreSchool;
 
+/**
+ *  Displays all the details for the selected Preschool from the ListActivity
+ */
 public class DetailActivity extends AppCompatActivity {
-    int id;
-    TextView schoolAddressText;
-    TextView schoolDescriptionText;
-    TextView schoolPriceText;
-    TextView schoolTypeText;
-    TextView schoolRegionText;
-    TextView schoolAgeGroupText;
-    ImageView schoolPrimaryImage;
-    ImageView schoolRatingImage;
-    ImageView schoolImage2;
-    ImageButton favSchoolImageButton;
+    //region private Variables
+    private int id;
+    private TextView schoolAddressText;
+    private TextView schoolDescriptionText;
+    private TextView schoolPriceText;
+    private TextView schoolTypeText;
+    private TextView schoolRegionText;
+    private TextView schoolAgeGroupText;
+    private ImageView schoolPrimaryImage;
+    private ImageView schoolRatingImage;
+    private ImageView schoolImage2;
+    private ImageButton favSchoolImageButton;
 
-
+    private DatabaseHelper searchHelper;
+    private Cursor cursor;
+    // endregion private variables
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,46 +43,62 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        receiveIntentExtras();
+        searchHelper = DatabaseHelper.getInstance(DetailActivity.this);
+
+        receiveIntentFromList();
 
         initializeViews();
 
         populateSchoolDetails();
 
-        setOnItemClickListener();
+        setClickListener();
 
     }
 
-    private void receiveIntentExtras() {
+    /**
+     * Receives the id of the selected Preschool from the List activity (search results)
+     */
+    private void receiveIntentFromList() {
 
         // get the id from the clicked item in ListActivity
         id = getIntent().getIntExtra(ListActivity.RECORD_ID, -1);
     }
 
+    /**
+     * Finds the Preschool using the id received from the intent.
+     * Fills in all the Preschool item details.
+     */
     private void populateSchoolDetails() {
-        //get the database instance
-        DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
         // get a preschool object using a cursor from the database
-        PreSchool retrievedPreschool = helper.retrievePreschool(id);
+        PreSchool retrievedPreschool = searchHelper.retrievePreschool(id);
+        String formattedAddress = retrievedPreschool.getStreetAddress() + " " + retrievedPreschool.getCity() + " " + retrievedPreschool.getState() + ", " + retrievedPreschool.getZipCode();
+        String formattedPrice = "$" + String.valueOf(retrievedPreschool.getPrice()) + " /mo";
         // set the fields using the preschool object
-        schoolAddressText.setText(retrievedPreschool.getStreetAddress() + " " + retrievedPreschool.getCity() + " " + retrievedPreschool.getState() + ", " + retrievedPreschool.getZipCode());
+        schoolAddressText.setText(formattedAddress);
         schoolDescriptionText.setText(retrievedPreschool.getSchoolDescription());
-        schoolPriceText.setText("$" + String.valueOf(retrievedPreschool.getPrice()) + " /mo");
+        schoolPriceText.setText(formattedPrice);
+        schoolTypeText.setText(retrievedPreschool.getType());
+        schoolRegionText.setText(retrievedPreschool.getRegion());
+        schoolAgeGroupText.setText(retrievedPreschool.getAgeGroup());
+
         // if its a favorite, the fav icon will be filled red. its just an outline image if not a favorite
         if (retrievedPreschool.getFavorite() == 1) {
             favSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
         }
-        // the preschool object just holds a 1-5 int rating. the extractRating function
-        // puts in the right image for that number
-        schoolRatingImage.setImageResource(extractRating(retrievedPreschool.getRating()));
-        schoolTypeText.setText(retrievedPreschool.getType());
-        schoolRegionText.setText(retrievedPreschool.getRegion());
-        schoolAgeGroupText.setText(retrievedPreschool.getAgeGroup());
+        // all the images for the school
         schoolPrimaryImage.setImageResource(retrievedPreschool.getImageByPostion(0));
         schoolImage2.setImageResource(retrievedPreschool.getImageByPostion(1));
+
+        // the rating for the school is just holds a 1-5 integer. the extractRating function
+        // puts in the right image for that number.
+        schoolRatingImage.setImageResource(extractRating(retrievedPreschool.getRating()));
     }
 
+    /**
+     * initializes all the views in the layout
+     */
     private void initializeViews() {
+        // TextView
         schoolAddressText = (TextView) findViewById(R.id.address_info_detail);
         schoolDescriptionText = (TextView) findViewById(R.id.description_info_detail);
         schoolPriceText = (TextView) findViewById(R.id.price_info_detail);
@@ -84,15 +106,23 @@ public class DetailActivity extends AppCompatActivity {
         schoolRegionText = (TextView) findViewById(R.id.region_info_detail);
         schoolAgeGroupText = (TextView) findViewById(R.id.age_group_info_detail);
 
+        // ImageView
         schoolPrimaryImage = (ImageView) findViewById(R.id.default_school_image_detail);
         schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
         schoolImage2 = (ImageView) findViewById(R.id.school_photo2_detail);
         schoolRatingImage = (ImageView) findViewById(R.id.rating_image_detail);
 
+        // ImageButton
         favSchoolImageButton = (ImageButton) findViewById(R.id.favorite_school_image_detail);
 
     }
 
+    /**
+     * Takes the 1-5 school rating, and returns the equivalent star rating image for that number.
+     *
+     * @param rating Integer type, from 1-5
+     * @return Integer value of the star ratings image
+     */
     private int extractRating(int rating) {
         int result;
         switch (rating) {
@@ -118,34 +148,35 @@ public class DetailActivity extends AppCompatActivity {
         return result;
     }
 
-    private void setOnItemClickListener() {
+    /**
+     * Allows the user to select and remove the school as a favorite
+     */
+    private void setClickListener() {
         favSchoolImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHelper helper = DatabaseHelper.getInstance(DetailActivity.this);
-                Cursor cursor = helper.findPreschoolById(id);
-                cursor.moveToFirst();
-                // sets the favorite column in the db to 1 --> adds it as a favorite
-                if (cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_FAVORITE)) == 0) {
-                    helper.setFavoriteSchool(id);
-                    cursor = helper.findPreschoolById(id);
+                PreSchool retrievedPreschool = searchHelper.retrievePreschool(id);
+                // sets the favorite column in the database to 1 --> adds it as a favorite
+                if (retrievedPreschool.getFavorite() == 0) {
+                    searchHelper.setFavoriteSchool(id);
                     // fills in the fav icon to red
                     favSchoolImageButton.setImageResource(R.drawable.ic_favorite_red_24dp);
                 } else {
-                    // sets the favorite column in the db to 0 --> removes favorite school
-                    helper.removeFavoriteSchool(id);
-                    cursor = helper.findPreschoolById(id);
+                    // sets the favorite column in the database to 0 --> removes favorite school
+                    searchHelper.removeFavoriteSchool(id);
                     // sets the favorite icon back to just the outline
                     favSchoolImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 }
-
-                cursor.close();
             }
         });
     }
 
 
-    // filling toolbar with menu options, and setting the actions for them
+    /**
+     * filling the actionbar menu
+     * @param menu Menu
+     * @return true after layout inflation
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -154,23 +185,42 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Back press will refresh the list results.
+     * Is necessary in case user had selected a new favorite.
+     * The new list results will then show the fav icon in the row
+     * @param item MenuItem
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // make sure the list is refreshed after user clicks back button
-                Intent backToList = getIntent();
-                if (backToList == null) {
+                Intent intentToListResults = getIntent();
+                if (intentToListResults == null) {
                     break;
                 }
-                setResult(RESULT_OK, backToList);
+                setResult(RESULT_OK, intentToListResults);
                 finish();
                 break;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
-
         return true;
+    }
+
+    /**
+     * overrides back button on device if pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intentToListResults = getIntent();
+        if (intentToListResults == null) {
+            return;
+        }
+        setResult(RESULT_OK, intentToListResults);
+        finish();
     }
 }

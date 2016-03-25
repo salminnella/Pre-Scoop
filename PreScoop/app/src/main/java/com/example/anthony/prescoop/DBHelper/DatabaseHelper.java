@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.anthony.prescoop.models.PreSchool;
+import com.example.anthony.prescoop.models.SearchDataForDB;
 
 /**
  * Created by anthony on 3/15/16.
@@ -14,6 +16,10 @@ import com.example.anthony.prescoop.models.PreSchool;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "PRESCOOP";
+
+    Cursor cursor;
+    SQLiteDatabase dbWrite = getWritableDatabase();
+    SQLiteDatabase dbRead = getReadableDatabase();
 
     // table and columns
     public static final String PRESCHOOL_TABLE_NAME = "preschools";
@@ -43,15 +49,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_PHOTO_5_DESCRIPTION = "photo5Desc";
     public static final String COL_FAVORITE = "favorite";
 
-    // TODO perhaps a contact column or website link column
-
     // builds all columns in one array for queries later on
     public static final String[] COLUMNS = {COL_ID, COL_NAME, COL_DESCRIPTION, COL_MONTHLY_PRICE,
             COL_STREET_ADDRESS, COL_CITY, COL_STATE, COL_ZIP, COL_TYPE, COL_RATING, COL_REGION, COL_RANGE,
             COL_PHONE_NUMBER, COL_AGE_GROUP,COL_PHOTO_1, COL_PHOTO_1_DESCRIPTION, COL_PHOTO_2, COL_PHOTO_2_DESCRIPTION,
             COL_PHOTO_3, COL_PHOTO_3_DESCRIPTION, COL_PHOTO_4, COL_PHOTO_4_DESCRIPTION, COL_PHOTO_5,
             COL_PHOTO_5_DESCRIPTION, COL_FAVORITE};
-
 
     // the actual sql statement to create the table
     public static final String CREATE_PRESCHOOLS_TABLE = "CREATE TABLE IF NOT EXISTS " + PRESCHOOL_TABLE_NAME +
@@ -108,37 +111,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // i know this should really have a backup data to temp area,
-        // then upgrade database, then restore data
         db.execSQL("DROP TABLE IF EXISTS " + PRESCHOOL_TABLE_NAME);
         this.onCreate(db);
     }
 
     /**
-     * This is used in the main activity, to populate the database with some preschools.
-     * We've been using static db's in the class exercises and labs, but wanted a way to have it
-     * start with some schools in the database.
-     * @param name
-     * @param schoolDescription
-     * @param price
-     * @param address
-     * @param city
-     * @param state
-     * @param zip
-     * @param type
-     * @param rating
-     * @param region
-     * @param range
-     * @param phoneNumber
-     * @param age
-     * @param favorite
-     * @param schoolImages
-     * @param imageDescription
+     * Populate the database with some preschools.
+     *
+     * @param name String
+     * @param schoolDescription Int to a R.string address
+     * @param price Double
+     * @param address String
+     * @param city String
+     * @param state String
+     * @param zip String
+     * @param type String
+     * @param rating Int
+     * @param region String
+     * @param range Int
+     * @param phoneNumber String
+     * @param age String - age group
+     * @param favorite int
+     * @param schoolImages int[]
+     * @param imageDescription String[]
      */
     public void insertIntoPreschools(String name, int schoolDescription, double price, String address, String city,
                                      String state, String zip, String type, int rating, String region, int range,
                                      String phoneNumber, String age, int favorite, int[] schoolImages, String[] imageDescription) {
-        SQLiteDatabase db = getWritableDatabase();
+        //SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(COL_NAME, name);
@@ -167,88 +167,116 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_PHOTO_5_DESCRIPTION, imageDescription[4]);
         values.put(COL_FAVORITE, favorite);
 
-        db.insert(PRESCHOOL_TABLE_NAME, null, values);
+        dbWrite.insert(PRESCHOOL_TABLE_NAME, null, values);
     }
 
 
     /**
      * Retrieves all the preschools from the database, and returns a cursor
-     * @return
+     * @return Cursor
      */
     public Cursor getAllPreschools() {
-        SQLiteDatabase db = getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
 
         if (cursor != null) {
             cursor.moveToFirst();
         }
 
         return cursor;
-
-        //TODO: close cursor?
     }
 
-    public Cursor findPreschoolsByName(String name) {
+    public Cursor searchDB(SearchDataForDB searchData) {
+        String where = "name LIKE ? COLLATE NOCASE ";
+        String[] args = {"%" + searchData.getSearchCriteria()[0] + "%"};
 
+        Log.i("db", "school name is; " + searchData.getSearchCriteria()[0]);
+        Log.i("db", "args; " + args[0]);
+        //AND range <= ? AND rating = ? AND price <= ?
+        //, searchData.getSearchRange(), searchData.getSearchRating(), searchData.getSearchPrice()
+
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    /**
+     * Searches the database in just the School Name column
+     * @param name String
+     * @return Cursor
+     */
+    public Cursor findPreschoolsByName(String name) {
         String where = "name LIKE ? COLLATE NOCASE ";
         String[] args = {"%" + name + "%"};
 
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
+    /**
+     * Searches the database in just the School Range column
+     * @param range String
+     * @return Cursor
+     */
     public Cursor findPreschoolsByRange(String range) {
-
         String where = "range <= ? ";
         String[] args = {range};
 
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
+    /**
+     * Searches the database in just the School Rating column
+     * @param rating String
+     * @return Cursor
+     */
     public Cursor findPreschoolsByRating(String rating) {
-
         String where = "rating = ? ";
         String[] args = {rating};
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
+    /**
+     * Searches the database in just the School Price column
+     * @param price
+     * @return
+     */
     public Cursor findPreschoolsByPrice(String price) {
-
         String where = "price > 0 AND price <= ? ";
         String[] args = {price};
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
+    /**
+     * Searches the database in the Range, Rating, and Price columns
+     * @param range
+     * @param rating
+     * @param price
+     * @return
+     */
     public Cursor findByRangeRatingPrice(String range, String rating, String price) {
         String where = "range <= ? AND rating = ? AND (price > 0 AND price <= ?) ";
         String[] args = {range, rating, price};
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -256,9 +284,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor filterPreschoolList(String query) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME,
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME,
                 COLUMNS,
                 COL_NAME + " LIKE ? COLLATE NOCASE",
                 new String[]{"%" + query + "%"},
@@ -270,41 +296,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-
     /**
      * From the details activity, a search based on the id of the preschool
      * is performed to retrieve all necessary details to display to the user
      *
-     * @param id  id of the preschool
-     * @return Cursor
+     * @param id int
+     * @return PreSchool object
      */
-    public Cursor findPreschoolById(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS,
-                COL_ID + "=" + id,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
-    }
-
     public PreSchool retrievePreschool(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME, COLUMNS,
-                COL_ID + "=" + id,
-                null,
-                null,
-                null,
-                null,
-                null);
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS,
+                COL_ID + "=" + id, null, null, null, null, null);
 
         if (cursor != null) {
             cursor.moveToFirst();
@@ -337,25 +338,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void setFavoriteSchool(int id) {
-        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_FAVORITE, 1);
 
-        db.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[] {String.valueOf(id)});
+        dbWrite.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
     public void removeFavoriteSchool(int id) {
-        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_FAVORITE, 0);
 
-        db.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[]{String.valueOf(id)});
+        dbWrite.update(PRESCHOOL_TABLE_NAME, contentValues, COL_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
     public Cursor findFavoritePreschools() {
-        SQLiteDatabase db = getReadableDatabase();
-
-        Cursor cursor = db.query(PRESCHOOL_TABLE_NAME,
+        cursor = dbRead.query(PRESCHOOL_TABLE_NAME,
                 COLUMNS,
                 COL_FAVORITE + " = 1 ",
                 null,

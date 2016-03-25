@@ -22,15 +22,18 @@ import com.example.anthony.prescoop.models.PreSchool;
 
 import java.util.ArrayList;
 
+/**
+ * Application begins here. The activity provides 4 to use as search criteria
+ * that will be used in finding preschools from the database
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    public static final String SEARCH_CRITERIA = "searchCriteria";
-    public static final String SEARCH_NAME = "searchName";
-    public static final String SEARCH_RANGE = "searchRange";
-    public static final String SEARCH_RATING = "searchRating";
-    public static final String SEARCH_PRICE = "searchPrice";
-    public static final String SEARCH_FAVS = "searchPrice";
-    public static final String FAVS_KEY = "findFavs";
+    public static final String SEARCH_PRESCHOOL_NAME = "searchName";
+    public static final String SEARCH_PRESCHOOL_RANGE = "searchRange";
+    public static final String SEARCH_PRESCHOOL_RATING = "searchRating";
+    public static final String SEARCH_PRESCHOOL_PRICE = "searchPrice";
+    public static final String FIND_FAVORITE_PRESCHOOLS = "findFavs";
+    public static final Boolean FAVORITES_VALUE = true;
 
     //region private variables
     private EditText priceEdit;
@@ -40,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private Spinner ratingSpinner;
     private SpinAdapter ratingAdapter;
     private Button search;
-    DatabaseHelper db;
+    DatabaseHelper searchHelper;
+    Cursor cursor;
     // endregion private variables
 
     @Override
@@ -48,63 +52,68 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = DatabaseHelper.getInstance(MainActivity.this);
+        searchHelper = DatabaseHelper.getInstance(MainActivity.this);
+
         initViews();
-        initClickListeners();
 
-        fillTempPreschool();
+        initClickListenerAndDoSearch();
 
+        fillDatabaseWithPreschools();
     }
 
+    /**
+     * initialize all views that are used in the activity,
+     * as well as the adapters for the 2 drop down spinners.
+     */
     private void initViews() {
         priceEdit = (EditText) findViewById(R.id.price_main_edit);
         schoolNameEdit = (EditText) findViewById(R.id.school_name_main_edit);
         search = (Button) findViewById(R.id.search_button);
 
-
-
+        // for the range spinner, to select a minimum distance for schools (within 5 miles etc.)
         rangeSpinner = (Spinner) findViewById(R.id.range_spinner_main);
-        // Create an ArrayAdapter for Range drop down using the string-array in strings.xml
         rangeAdapter = ArrayAdapter.createFromResource(this, R.array.range_array, android.R.layout.simple_spinner_item);
-        // default layout to use when the list of choices appears
         rangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //connect the two
         rangeSpinner.setAdapter(rangeAdapter);
 
-        // for the images on the schoolrating drop down spinner
+        // for the rating spinner, filled with images to select a minimum rating ( 1 star, 2 stars etc.)
         ratingSpinner = (Spinner) findViewById(R.id.rating_spinner_main);
-        // Create a custom adapter forrating drop down
         ratingAdapter = new SpinAdapter(MainActivity.this, new Integer[]{R.drawable.pixel, R.drawable.one_star, R.drawable.two_stars, R.drawable.three_stars, R.drawable.four_stars, R.drawable.five_stars});
-
-        //connect the two
         ratingSpinner.setAdapter(ratingAdapter);
-
-
     }
 
-    private void initClickListeners() {
+    /**
+     * Set the click listener on the Search button.
+     * Also performs the search, after filling intentToListResults
+     * with search criteria in extras
+     */
+    private void initClickListenerAndDoSearch() {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //Search searchData = new Search(schoolNameEdit.getText().toString(), getRange(), getRating(), priceEdit.getText().toString());
-                Intent intent = new Intent(MainActivity.this, ListActivity.class);
-                //intent.putExtra("searchObject", searchData);
-                intent.putExtra(SEARCH_NAME, schoolNameEdit.getText().toString());
-                intent.putExtra(SEARCH_RANGE, getRange());
-                intent.putExtra(SEARCH_RATING, getRating());
-                intent.putExtra(SEARCH_PRICE, priceEdit.getText().toString());
-               startActivity(intent);
+                //SearchDataForDB searchData = new SearchDataForDB(schoolNameEdit.getText().toString(), getRange(), getRating(), priceEdit.getText().toString());
+                Intent intentToListResults = new Intent(MainActivity.this, ListActivity.class);
+                //intentToListResults.putExtra("searchObject", searchData);
+                intentToListResults.putExtra(SEARCH_PRESCHOOL_NAME, schoolNameEdit.getText().toString());
+                intentToListResults.putExtra(SEARCH_PRESCHOOL_RANGE, getRange());
+                intentToListResults.putExtra(SEARCH_PRESCHOOL_RATING, getRating());
+                intentToListResults.putExtra(SEARCH_PRESCHOOL_PRICE, priceEdit.getText().toString());
+                //Log.i("MainAct", "searchdata is:" + searchData.getSearchCriteria()[0]);
+               startActivity(intentToListResults);
             }
         });
     }
 
-    private void fillTempPreschool() {
-        //DatabaseHelper db = new DatabaseHelper(this);
-        // do a get on preschools
-        Cursor cursor = db.getAllPreschools();
+    /**
+     * Fills the database with preschool objects, but only if there are no
+     * current schools in it.  If the cursor comes back with a count of 0,
+     * the insert is skipped.
+     */
+    private void fillDatabaseWithPreschools() {
+        // do a find on all preschools
+        cursor = searchHelper.getAllPreschools();
         cursor.moveToFirst();
-
 
         // if the cursor result is empty, insert the schools below
         // if the cursor isn't empty skip the insert
@@ -114,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayList<PreSchool> preschools = PopulatePreschoolDB.getPreSchoolItems(MainActivity.this);
             for (PreSchool school : preschools) {
-                db.insertIntoPreschools(school.getName(), school.getSchoolDescription(), school.getPrice(),
+                searchHelper.insertIntoPreschools(school.getName(), school.getSchoolDescription(), school.getPrice(),
                         school.getStreetAddress(), school.getCity(), school.getState(), school.getZipCode(),
                         school.getType(), school.getRating(), school.getRegion(), school.getRange(),
                         school.getPhoneNumber(), school.getAgeGroup(), school.getFavorite(), school.getImages(), school.getImageDescription());
@@ -123,12 +132,17 @@ public class MainActivity extends AppCompatActivity {
         }
       }
 
+    /**
+     *  This interprets the string value of the selected item in the drop down,
+     *  and converts to a single integer value.
+     *
+     *  Returns  a string value of that integer to the intentToListResults.
+     */
     private String getRange() {
         int rangeAsNumber = 0;
         if (rangeSpinner.getSelectedItem().toString().isEmpty()) {
             return "";
         }
-
         switch (rangeSpinner.getSelectedItem().toString()) {
             case "1 Mile":
                 rangeAsNumber = 1;
@@ -152,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
         return String.valueOf(rangeAsNumber);
     }
 
+    /**
+     *   Takes the int value of the selected item in the drop down,
+     *  and returns a string value to be passed in the intentToListResults
+     */
     private String getRating() {
         int rating=0;
         // TODO try getselecteditemposition
@@ -165,6 +183,11 @@ public class MainActivity extends AppCompatActivity {
         return String.valueOf(rating);
     }
 
+    /**
+     * fills the action bar, only has a Favorite icon
+     * @param menu Menu type variable
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -174,23 +197,28 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Gives the user to the option to view all favorites from teh home screen.
+     * once the Favorite icon is pressed, the results are shown in the List activity.
+     *
+     * @param item MenuItem type variable
+     * @return the item that was selected.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_find_favorites:
                 //go to list activity and find all favorites
-                DatabaseHelper searchHelper = DatabaseHelper.getInstance(MainActivity.this);
-                Cursor cursor = searchHelper.findFavoritePreschools();
+                cursor = searchHelper.findFavoritePreschools();
                 if (cursor.getCount() > 0) {
                     Intent intentForFavs = new Intent(MainActivity.this, ListActivity.class);
-                    intentForFavs.putExtra(SEARCH_FAVS, FAVS_KEY);
+                    intentForFavs.putExtra(FIND_FAVORITE_PRESCHOOLS, FAVORITES_VALUE);
                     startActivity(intentForFavs);
                 } else {
-                    Toast.makeText(MainActivity.this, "No Favorites To View, Add One From The Details Page", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "No Favorites To View, Add One From The Details Page", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }
