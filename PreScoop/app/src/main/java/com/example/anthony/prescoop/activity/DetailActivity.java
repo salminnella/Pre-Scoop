@@ -109,8 +109,8 @@ public class DetailActivity extends AppCompatActivity {
         schoolRegionText.setText(retrievedPreschool.getRegion());
         schoolAgeGroupText.setText(retrievedPreschool.getAgeGroup());
         if (retrievedPreschool.getImageDescription() != null) {
-            schoolImage2Descrption.setText(retrievedPreschool.getImageDescription()[1]);
-            schoolImage3Descrption.setText(retrievedPreschool.getImageDescription()[2]);
+            schoolImage2Descrption.setText(retrievedPreschool.getImageDescriptionByPostion(0));
+            schoolImage3Descrption.setText(retrievedPreschool.getImageDescriptionByPostion(1));
         }
 
         // if its a favorite, the fav icon will be filled red. its just an outline image if not a favorite

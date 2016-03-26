@@ -80,7 +80,7 @@ public class ListActivity extends AppCompatActivity {
             return;
         }
 
-        searchData = intentFromMain.getParcelableExtra("searchObject");
+        searchData = intentFromMain.getParcelableExtra(MainActivity.SEARCH_CRITERIA_VALUES);
         isViewingFavorites = intentFromMain.getBooleanExtra(MainActivity.FIND_FAVORITE_PRESCHOOLS, false);
     }
 
@@ -116,7 +116,7 @@ public class ListActivity extends AppCompatActivity {
             cursorAdapter = new DBCursorAdapter(ListActivity.this, cursor, 0);
             listView.setAdapter(cursorAdapter);
         } else {
-            Toast.makeText(ListActivity.this, "No Results Found, Please Try Again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ListActivity.this, R.string.no_results, Toast.LENGTH_SHORT).show();
         }
     }
 

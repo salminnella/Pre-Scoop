@@ -8,9 +8,8 @@ import android.os.Parcelable;
  */
 public class SearchDataForDB implements Parcelable {
     private String[] searchCriteria;
-    private String[] columns;
 
-    // search constructor
+    // SearchDataForDB constructor
     public SearchDataForDB(String name, String range, String rating, String price) {
         searchCriteria = new String[4];
         searchCriteria[0] = name;
@@ -22,14 +21,11 @@ public class SearchDataForDB implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(this.searchCriteria);
-        //dest.writeStringArray(this.columns);
     }
 
     private SearchDataForDB(Parcel in) {
         this.searchCriteria = new String[4];
         in.readStringArray(this.searchCriteria);
-//        this.columns = new String[5];
-//        in.readStringArray(this.columns);
     }
 
 
@@ -76,13 +72,5 @@ public class SearchDataForDB implements Parcelable {
     }
     public void setSearchCriteria(String[] searchCriteria) {
         this.searchCriteria = searchCriteria;
-    }
-
-    public String[] getColumns() {
-        return columns;
-    }
-
-    public void setColumns(String[] columns) {
-        this.columns = columns;
     }
 }

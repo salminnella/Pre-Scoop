@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     // region Constants
     public static final String FIND_FAVORITE_PRESCHOOLS = "findFavs";
     public static final Boolean FAVORITES_VALUE = true;
+    public static final String SEARCH_CRITERIA_VALUES = "searchObject";
     // endregion Constants
 
     //region private variables
@@ -90,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
                 SearchDataForDB searchData = new SearchDataForDB(schoolNameEdit.getText().toString(), getRange(), getRating(), priceEdit.getText().toString());
                 Intent intentToListResults = new Intent(MainActivity.this, ListActivity.class);
-                intentToListResults.putExtra("searchObject", searchData);
-               startActivity(intentToListResults);
+                intentToListResults.putExtra(SEARCH_CRITERIA_VALUES, searchData);
+                startActivity(intentToListResults);
             }
         });
     }
@@ -104,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
     private void fillDatabaseWithPreschools() {
         // do a find on all preschools
         cursor = searchHelper.getAllPreschools();
-        cursor.moveToFirst();
 
         // if the cursor result is empty, insert the schools below
         // if the cursor isn't empty skip the insert

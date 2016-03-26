@@ -11,6 +11,10 @@ The details page shows a couple of photos of the school, its details and an opti
 <b>Bugs/Concerns</b><br>
 I found a bug yesterday about a half hour before this was due.  It looked like i needed a null check on the object holding the search criteria when refreshing the list after a back press from the details page or toggling the favorites list.
 
+The details page is not showing all of the additional photos for the school in the scroll view.  It might be an xml issue, or the pictures aren't being pulled out of the object correctly.
+
+There isn't any real error control on the MainActivity, and the search in the database doesn't include the school Name in any of the permutations (only by itself).  so the user can enter in the name plus the other fields but the search won't actually include the name in it.
+
 I also feel like i might have a cursor left open somewhere, and should put an override onStop in just to be sure there's nothing left open.
 
 <br><br>

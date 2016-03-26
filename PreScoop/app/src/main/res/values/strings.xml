@@ -76,6 +76,7 @@
     <string name="imagine_region">San Francisco</string>
     <string name="imagine_phoneNum">(415) 922-0104</string>
     <string name="imagine_ageGroup">2 - 5 years</string>
+    <string name="no_results">No Results Found, Please Try Again</string>
 
 
     <!-- this is the data for the range drop down in MainActivity -->

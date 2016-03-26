@@ -180,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllPreschools() {
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, null, null, null, null, COL_RATING + " DESC", null);
 
-        if (cursor != null) {
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
         }
 
@@ -285,7 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor searchDatabase(String where, String[] args) {
 
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS, where, args, null, null, COL_RATING + " DESC", null);
-        if (cursor != null) {
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
         }
         return cursor;
@@ -306,7 +306,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 COL_RATING + " DESC",
                 null);
-        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+        }
         return cursor;
     }
 
@@ -321,7 +323,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor = dbRead.query(PRESCHOOL_TABLE_NAME, COLUMNS,
                 COL_ID + "=" + id, null, null, null, null, null);
 
-        if (cursor != null) {
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
         }
 
@@ -388,7 +390,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_RATING + " DESC",
                 null);
 
-        if (cursor != null) {
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
         }
 
