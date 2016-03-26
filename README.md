@@ -24,7 +24,7 @@ Paper ProtoType<br>
 MainActivity<br>
 ![alt tag](https://cloud.githubusercontent.com/assets/16617555/14061689/96029f86-f343-11e5-80de-4fa331c4452f.jpg)
 
-<br>br>
+<br><br>
 ListActivity<br>
 ![alt tag](https://cloud.githubusercontent.com/assets/16617555/14061688/96025972-f343-11e5-912a-f2d0e60bfd86.jpg)
 
