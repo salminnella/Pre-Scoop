@@ -8,7 +8,7 @@ The ListActivity pulls the results from the database, where each item click brin
 The details page shows a couple of photos of the school, its details and an option to select that school as a favorite.
 
 
-<b>Bugs/Concerns</b>
+<b>Bugs/Concerns</b><br>
 I found a bug yesterday about a half hour before this was due.  It looked like i needed a null check on the object holding the search criteria when refreshing the list after a back press from the details page or toggling the favorites list.
 
 I also feel like i might have a cursor left open somewhere, and should put an override onStop in just to be sure there's nothing left open.
