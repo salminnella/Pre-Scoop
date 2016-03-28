@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
@@ -50,6 +51,11 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_list);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         searchHelper = DatabaseHelper.getInstance(ListActivity.this);
 

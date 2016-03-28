@@ -31,12 +31,8 @@
             </intent-filter>
 
         </activity>
-
-
-
         <activity android:name=".activity.DetailActivity"
-            android:parentActivityName=".activity.ListActivity"
-            android:theme="@style/AppTheme.Transparent"/>
+            android:parentActivityName=".activity.ListActivity"/>
     </application>
 
 </manifest>
