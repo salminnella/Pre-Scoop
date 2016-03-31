@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blackboard">
+
+    <TextView
+        android:id="@+id/school_name_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/school_name_text"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/toolbar"/>
+
+    <EditText
+        android:id="@+id/school_name_main_edit"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:inputType="text"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:background="@drawable/rounded_transparent"
+        android:layout_below="@+id/school_name_main_text"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/range_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/string_range_main"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="17dp"
+        android:layout_below="@id/school_name_main_edit"
+        android:layout_alignLeft="@+id/school_name_main_text"
+        android:layout_alignStart="@+id/school_name_main_text"/>
+
+    <Spinner
+        android:id="@+id/range_spinner_main"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:layout_below="@+id/range_main_text"
+        android:layout_alignLeft="@+id/school_name_main_edit"
+        android:layout_alignStart="@+id/school_name_main_edit"
+        android:background="@drawable/rounded_transparent"></Spinner>
+
+    <TextView
+        android:id="@+id/rating_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="@string/string_rating_main"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/range_spinner_main"
+        android:layout_alignLeft="@+id/school_name_main_text"
+        android:layout_alignStart="@+id/school_name_main_text"/>
+
+    <Spinner
+        android:id="@+id/rating_spinner_main"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:layout_below="@+id/rating_main_text"
+        android:layout_alignLeft="@+id/school_name_main_edit"
+        android:background="@drawable/rounded_transparent"></Spinner>
+
+    <TextView
+        android:id="@+id/price_main_text"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="@string/budget_string"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/rating_spinner_main"
+        android:layout_alignLeft="@+id/school_name_main_text"
+        android:layout_alignStart="@+id/school_name_main_text"/>
+
+    <EditText
+        android:id="@+id/price_main_edit"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:inputType="text"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:background="@drawable/rounded_transparent"
+        android:layout_below="@+id/price_main_text"
+        android:layout_alignLeft="@+id/school_name_main_edit"
+        android:layout_alignStart="@+id/school_name_main_text"/>
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/preshool_search"
+        android:background="@drawable/rounded_corners"
+        android:layout_below="@+id/price_main_edit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp" />
+
+</RelativeLayout>

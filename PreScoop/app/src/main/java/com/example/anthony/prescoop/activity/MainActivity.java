@@ -3,6 +3,8 @@ package com.example.anthony.prescoop.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
+import com.example.anthony.prescoop.fragments.SearchCriteriaFragment;
 import com.example.anthony.prescoop.models.PopulatePreschoolDB;
 import com.example.anthony.prescoop.models.PreSchool;
 import com.example.anthony.prescoop.models.SearchDataForDB;
@@ -43,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private Button search;
     DatabaseHelper searchHelper;
     Cursor cursor;
+
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
     // endregion private variables
 
     @Override
@@ -60,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         initClickListenerAndDoSearch();
 
         fillDatabaseWithPreschools();
+
+        SearchCriteriaFragment searchCriteriaFragment = new SearchCriteriaFragment();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.fragment_container_main, searchCriteriaFragment);
     }
 
     /**

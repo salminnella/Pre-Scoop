@@ -5,12 +5,19 @@
     android:layout_height="match_parent"
     tools:context="com.example.anthony.prescoop.activity.DetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_details"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorTransparent"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorTransparent"/>
+
+    </FrameLayout>
+
 
     <RelativeLayout
         android:id="@+id/header_image_details"
