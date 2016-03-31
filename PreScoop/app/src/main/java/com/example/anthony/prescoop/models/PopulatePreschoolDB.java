@@ -76,6 +76,7 @@ public class PopulatePreschoolDB {
         acorn.setRange(16);
         acorn.setPhoneNumber(context.getString(R.string.acorn_phoneNum));
         acorn.setAgeGroup(context.getString(R.string.acorn_ageGroup));
+        acorn.setFavorite(1);
         // array for the images for acorn school
         acornImages[0] = R.drawable.acorn_main_photo;
         acornImages[1] = R.drawable.acorn_photo_two;
@@ -100,6 +101,7 @@ public class PopulatePreschoolDB {
         quarryLane.setRange(11);
         quarryLane.setPhoneNumber(context.getString(R.string.quarry_phoneNum));
         quarryLane.setAgeGroup(context.getString(R.string.quarry_ageGroup));
+        quarryLane.setFavorite(1);
         // array for the images for quarry school
         quarryLaneImages[0] = R.drawable.quarry_campus;
         quarryLaneImages[1] = R.drawable.quarry_campus_2;
@@ -128,6 +130,7 @@ public class PopulatePreschoolDB {
         montessori.setRange(6);
         montessori.setPhoneNumber(context.getString(R.string.montessori_phone));
         montessori.setAgeGroup(context.getString(R.string.montessori_ageGroup));
+        montessori.setFavorite(1);
         // array for the images for montessori school
         montessoriImages[0] = R.drawable.montessori;
         montessori.setImages(montessoriImages);

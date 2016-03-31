@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
+import com.example.anthony.prescoop.fragments.FavoritesFragment;
 import com.example.anthony.prescoop.fragments.SearchCriteriaFragment;
 import com.example.anthony.prescoop.models.PopulatePreschoolDB;
 import com.example.anthony.prescoop.models.PreSchool;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
  * Application begins here. The activity provides 4 to use as search criteria
  * that will be used in finding preschools from the database
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchCriteriaFragment.OnSelectedFavoritesListener{
     // region Constants
     public static final String FIND_FAVORITE_PRESCHOOLS = "findFavs";
     public static final Boolean FAVORITES_VALUE = true;
@@ -61,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
         searchHelper = DatabaseHelper.getInstance(MainActivity.this);
 
-        initViews();
+        //initViews();
 
-        initClickListenerAndDoSearch();
+        //initClickListenerAndDoSearch();
 
         fillDatabaseWithPreschools();
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.fragment_container_main, searchCriteriaFragment);
+        mFragmentTransaction.commit();
     }
 
     /**
@@ -202,6 +205,19 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onSelectedFavorites(Cursor c) {
+        Log.i("MainAct", "OnSelectedFavorites - cursor size is: " + cursor.getCount());
+
+        FavoritesFragment favoritesFragment = new FavoritesFragment();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.fragment_container_main, favoritesFragment);
+        mFragmentTransaction.commit();
+
+        //favoritesFragment.findFavorites(c);
+    }
+
     /**
      * Gives the user to the option to view all favorites from teh home screen.
      * once the Favorite icon is pressed, the results are shown in the List activity.
@@ -216,9 +232,9 @@ public class MainActivity extends AppCompatActivity {
                 //go to list activity and find all favorites
                 cursor = searchHelper.findFavoritePreschools();
                 if (cursor.getCount() > 0) {
-                    Intent intentForFavorites = new Intent(MainActivity.this, ListActivity.class);
-                    intentForFavorites.putExtra(FIND_FAVORITE_PRESCHOOLS, FAVORITES_VALUE);
-                    startActivity(intentForFavorites);
+                    Log.i("MainAct", " from menu button - cursor size is: " + cursor.getCount());
+                    onSelectedFavorites(cursor);
+
                 } else {
                     Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT).show();
                 }

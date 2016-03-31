@@ -9,7 +9,6 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/toolbar_list"></ListView>
+        android:layout_marginTop="10dp"></ListView>
 
 </RelativeLayout>
