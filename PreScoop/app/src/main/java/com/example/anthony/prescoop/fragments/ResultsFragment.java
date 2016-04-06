@@ -1,6 +1,7 @@
 package com.example.anthony.prescoop.fragments;
 
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class ResultsFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         findFavorites();
-        searchDatabaseForSchools(searchData);
+        //searchDatabaseForSchools(searchData);
     }
 
     @Override
@@ -40,9 +41,25 @@ public class ResultsFragment extends ListFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             searchData = bundle.getParcelable(MainActivity.SEARCH_CRITERIA_VALUES);
-            cursor = searchHelper.prepareSearchQuery(searchData);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+
+                    cursor = searchHelper.prepareSearchQuery(searchData);
+
+                    return null;
+                }
+            }.execute();
         } else {
-            cursor = searchHelper.findFavoritePreschools();
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+
+                    cursor = searchHelper.findFavoritePreschools();
+
+                    return null;
+                }
+            }.execute();
         }
 
         DBCursorAdapter cursorAdapter = new DBCursorAdapter(getActivity(), cursor, 0);
@@ -66,12 +83,22 @@ public class ResultsFragment extends ListFragment {
      * Uses the chosen criteria, or favorites option, to search the database for preschools
      * Returns the search results or all of the favorite schools
      */
-    private void searchDatabaseForSchools(SearchDataForDB searchDataForDB) {
+    private void searchDatabaseForSchools(final SearchDataForDB searchDataForDB) {
 
         if (isViewingFavorites) {
             cursor = searchHelper.findFavoritePreschools();
         } else if (searchDataForDB != null){
-            cursor = searchHelper.prepareSearchQuery(searchDataForDB);
+
+            new AsyncTask<Void, Void, Cursor>() {
+                @Override
+                protected Cursor doInBackground(Void... params) {
+
+                    cursor = searchHelper.prepareSearchQuery(searchDataForDB);
+
+                    return cursor;
+                }
+            }.execute();
+
         }
 
         if (cursor.getCount() > 0) {
