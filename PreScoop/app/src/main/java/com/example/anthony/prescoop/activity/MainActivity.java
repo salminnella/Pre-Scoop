@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.example.anthony.prescoop.DBHelper.DatabaseHelper;
 import com.example.anthony.prescoop.R;
 import com.example.anthony.prescoop.adapters.SpinAdapter;
-import com.example.anthony.prescoop.fragments.FavoritesFragment;
+import com.example.anthony.prescoop.fragments.ResultsFragment;
 import com.example.anthony.prescoop.fragments.SearchCriteriaFragment;
 import com.example.anthony.prescoop.models.PopulatePreschoolDB;
 import com.example.anthony.prescoop.models.PreSchool;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Application begins here. The activity provides 4 to use as search criteria
  * that will be used in finding preschools from the database
  */
-public class MainActivity extends AppCompatActivity implements SearchCriteriaFragment.OnSelectedFavoritesListener{
+public class MainActivity extends AppCompatActivity implements SearchCriteriaFragment.OnSelectedListener {
     // region Constants
     public static final String FIND_FAVORITE_PRESCHOOLS = "findFavs";
     public static final Boolean FAVORITES_VALUE = true;
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements SearchCriteriaFra
     private Button search;
     DatabaseHelper searchHelper;
     Cursor cursor;
+
+    private boolean isViewingFavorites;
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
@@ -191,6 +193,32 @@ public class MainActivity extends AppCompatActivity implements SearchCriteriaFra
         return String.valueOf(rating);
     }
 
+    @Override
+    public void onSelectedFavorites(Cursor c) {
+        Log.i("MainAct", "OnSelectedFavorites - cursor size is: " + cursor.getCount());
+
+        isViewingFavorites = true;
+        ResultsFragment resultsFragment = new ResultsFragment();
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.fragment_container_main, resultsFragment);
+        mFragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSelectedSearch(SearchDataForDB searchDataForDB) {
+        //receive search criteria holder and send it to the results list to do the search
+        isViewingFavorites = false;
+        ResultsFragment resultsFragment = new ResultsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(SEARCH_CRITERIA_VALUES, searchDataForDB);
+        resultsFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container_main, resultsFragment);
+        fragmentTransaction.commit();
+    }
+
     /**
      * fills the action bar, only has a Favorite icon
      * @param menu Menu type variable
@@ -205,19 +233,6 @@ public class MainActivity extends AppCompatActivity implements SearchCriteriaFra
         return true;
     }
 
-    @Override
-    public void onSelectedFavorites(Cursor c) {
-        Log.i("MainAct", "OnSelectedFavorites - cursor size is: " + cursor.getCount());
-
-        FavoritesFragment favoritesFragment = new FavoritesFragment();
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.fragment_container_main, favoritesFragment);
-        mFragmentTransaction.commit();
-
-        //favoritesFragment.findFavorites(c);
-    }
-
     /**
      * Gives the user to the option to view all favorites from teh home screen.
      * once the Favorite icon is pressed, the results are shown in the List activity.
@@ -229,16 +244,24 @@ public class MainActivity extends AppCompatActivity implements SearchCriteriaFra
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_find_favorites:
-                //go to list activity and find all favorites
-                cursor = searchHelper.findFavoritePreschools();
-                if (cursor.getCount() > 0) {
-                    Log.i("MainAct", " from menu button - cursor size is: " + cursor.getCount());
-                    onSelectedFavorites(cursor);
+                if (isViewingFavorites) {
+                    isViewingFavorites = false;
+                    SearchCriteriaFragment searchCriteria = new SearchCriteriaFragment();
+                    mFragmentManager = getSupportFragmentManager();
+                    mFragmentTransaction = mFragmentManager.beginTransaction();
+                    mFragmentTransaction.replace(R.id.fragment_container_main, searchCriteria)
+                    .commit();
 
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT).show();
+                    //go to list activity and find all favorites
+                    cursor = searchHelper.findFavoritePreschools();
+                    if (cursor.getCount() > 0) {
+                        Log.i("MainAct", " from menu button - cursor size is: " + cursor.getCount());
+                        onSelectedFavorites(cursor);
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT).show();
+                    }
                 }
-
                 break;
         }
         return super.onOptionsItemSelected(item);
