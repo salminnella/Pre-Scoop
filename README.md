@@ -41,4 +41,10 @@ DetailActivity<br>
 
 <br><br><br><br><br><br><br><br>
 
-<img src="https://github.com/salminnella/Pre-Scoop/blob/master/logcat2.jpg" /img>"
+<img src="https://github.com/salminnella/Pre-Scoop/blob/master/logcat2.jpg" /img>
+
+
+<br><br><br><br><br><br><br><br>
+
+
+<img src="https://raw.githubusercontent.com/salminnella/Pre-Scoop/master/logcat2.jpg" /img>
