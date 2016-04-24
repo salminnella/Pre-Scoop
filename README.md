@@ -36,15 +36,3 @@ ListActivity<br>
 
 DetailActivity<br>
 ![alt tag](https://cloud.githubusercontent.com/assets/16617555/14061687/95efce88-f343-11e5-926f-9e4d5b48e7e7.jpg)
-
-
-
-<br><br><br><br><br><br><br><br>
-
-<img src="https://github.com/salminnella/Pre-Scoop/blob/master/logcat2.jpg" /img>
-
-
-<br><br><br><br><br><br><br><br>
-
-
-<img src="https://raw.githubusercontent.com/salminnella/Pre-Scoop/master/logcat2.jpg" /img>
