@@ -41,5 +41,4 @@ DetailActivity<br>
 
 <br><br><br><br><br><br><br><br>
 
-
-![alt tag](https://github.com/salminnella/Pre-Scoop/blob/master/logcat2.jpg}
+<img src="https://github.com/salminnella/Pre-Scoop/blob/master/logcat2.jpg" /img>"
